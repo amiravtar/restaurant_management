@@ -1,0 +1,1047 @@
+/*
+responsive CSS of the template.
+*/
+/************************* 1200px *************************/
+@media (max-width:1280px) {
+  .mega-menu {
+      width: auto!important;
+  }
+  .navbar-expand-lg .navbar-nav .dropdown-menu-right {
+    left: -264px!important;
+    right: -296px !important;
+}
+}
+@media (min-width: 1200px){
+    .container { max-width: 1170px;}
+}
+
+@media (max-width:1199px) {
+    .container { max-width: 100%; }
+    .navbar-expand-lg .navbar-nav .nav-link {
+        padding-left: 12px;
+        padding-right: 12px;
+        color: #000;
+    }
+    .icons-set .icon-items {
+        padding-right: 12px;
+        padding-left: 12px;
+    }
+    .partner-btn {
+        padding-right: 12px;
+    }
+
+}
+
+/************************* 1024px *************************/
+@media (max-width:1099px) {
+    .container { max-width: 100%; }
+    .navbar-expand-lg .navbar-nav .nav-link {
+        padding-left: 12px;
+        padding-right: 12px;
+        color: #000;
+    }
+    .icons-set .icon-items {
+        padding-right: 12px;
+        padding-left: 12px;
+    }
+    .partner-btn {
+        padding-right: 12px;
+    }
+
+}
+
+/************************* 980px *************************/
+@media (max-width:1023px) {
+    .container { max-width: 100%; }
+    .navbar-expand-lg .navbar-nav .nav-link {
+        padding-left: 10px;
+        padding-right: 10px;
+        color: #000;
+    }
+    .icons-set .icon-items {
+        padding-right: 10px;
+        padding-left: 10px;
+    }
+    .partner-btn {
+        padding-right: 10px;
+    }
+    .delivery-men {
+        margin-top: 50px;
+    }
+    .profile-dt li {
+        margin-right: 15px;
+    }
+    .show-map-result {
+        display: none;
+    }
+    .popular-restaurants {
+        display: none;
+    }
+    .google-ads {
+        display: none;
+    }
+    .like-comments {
+        float: right;
+        margin-top: 30px;
+    }
+    .like-comments > ul li {
+        margin-left: 30px;
+    }
+    .contact-info {
+        margin-bottom: 0px;
+    }
+    .recipes-title {
+        margin: 34px 0px;
+    }
+    .recipe-item .overlay {
+        top: 15px;
+        bottom: 15px;
+    }
+}
+
+@media only screen and (min-width:768px) and (max-width:999px) {
+    .container { max-width: 100%; }
+}
+@media (max-width:992px) {
+    .text-center {
+        text-align:center;
+    }
+    .text-center {
+        text-align:center;
+    }
+    .menu-items {
+        float:right;
+    }
+    .icons-set{
+        float:left;
+    }
+    .logo-box {
+        padding:18px 0px;
+    }
+    .menu-items {
+        float: none;
+        padding: 10px 0px;
+        width: 100%
+    }
+    .icons-set{
+        float: left;
+        position: absolute;
+        top: 0;
+        left: 15px;
+    }
+    .nav-text {
+        text-align: right;
+    }
+    .treading-sellers {
+        margin-top: 80px;
+    }
+    .category-recipes .recipe-feed-carousel .owl-stage-outer {
+        overflow: hidden;
+
+    }
+    .title {
+        font-size: 40px;
+    }
+    .form-box {
+        padding-top: 92px;
+        padding-bottom: 93px;
+    }
+    .app-block-preview .send-link {
+        width: 64%;
+    }
+    .comment-input-1 {
+        width: 64%;
+    }
+    .suggested-peoples {
+        display: none;
+    }
+    .select-images ul li {
+        margin-left: 10px;
+    }
+    .invoice-btn {
+        display: block;
+        margin: 5px 0;
+    }
+    .trace-map img {
+        width: 100%;
+    }
+    .contact-info {
+        margin-bottom: 0px;
+    }
+}
+
+@media (max-width:979px) {
+    .text-center {
+        text-align:center;
+    }
+    .text-center {
+        text-align:center;
+    }
+    .menu-items {
+        float:right;
+    }
+    .icons-set{
+        float:left;
+    }
+    .logo-box {
+        padding:18px 0px;
+    }
+    .menu-items {
+        float: none;
+        padding: 10px 0px;
+        width: 100%
+    }
+    .icons-set{
+        float: left;
+        position: absolute;
+        top: 0;
+        left: 15px;
+    }
+    .nav-text {
+        text-align: right;
+    }
+    .dropdown-menu {
+        position: absolute;
+        right: 0;
+        z-index: 1;
+        display: none;
+        float: right;
+        min-width: auto;
+        padding: 0px;
+        margin: 12px 0 0;
+        font-size: 12px;
+        color: #847577;
+        text-align: right;
+        list-style: none;
+        background-clip: padding-box;
+        border: 0px;
+        border-radius: 0px;
+        background-color: #fff;
+        box-shadow: 0px 1px 1px 0px rgba(0, 0, 0, 0.02);
+    }
+    .dropdown-menu a {
+        background-color: #fff;
+    }
+    .form-inline .form-control {
+        display: inline-block;
+        width: auto;
+        vertical-align: middle;
+    }
+    .left-text-b {
+        padding-top: 50px;
+        padding-bottom: 50px;
+    }
+    .owl-theme .owl-nav .owl-prev {
+        bottom:80px;
+    }
+    .owl-theme .owl-nav .owl-next {
+        bottom: 80px;
+    }
+    .treading-sellers {
+        margin-top: 80px;
+    }
+    .category-recipes .recipe-feed-carousel .owl-stage-outer {
+        overflow: hidden;
+
+    }
+    .video-9 .top-items {
+        position: absolute;
+        top: 20px;
+        float: none;
+        width: 100%;
+    }
+    .video-9 .top-items .views {
+        margin-right: 20px;
+    }
+    .video-9 .top-items .video-time {
+        margin-right: 20px;
+    }
+    .video-9 .bottom-items {
+        bottom: 20px;
+    }
+    .video-9 .bottom-items .video-title {
+        margin-right: 20px;
+    }
+    .video-9 .bottom-items .published {
+        margin-left: 20px;
+    }
+    .rating-input {
+        width: 85%;
+    }
+    .submit-btn {
+        margin-right: 20px;;
+    }
+    .post-input {
+        width: 47%;
+    }
+    .reply-btn {
+        margin-right: 20px;;
+    }
+    .reply-input {
+        width: 63%;
+    }
+    .meal-list img {
+        width: 100%;
+        float: right;
+    }
+    .my-checkout h3 {
+        margin-left: 35px;
+    }
+    .my-checkout ins {
+        margin-right: 36px;
+    }
+    .event-picy {
+        float:right;
+        width:100%;
+    }
+    .event-dt {
+        padding: 20px;
+        margin-right: 0px;
+        float:right;
+    }
+    .event-input {
+        width: 67%;
+    }
+    .delivery-men {
+        margin-top: 50px;
+    }
+}
+
+/************************* 480px *************************/
+@media (max-width:767px) {
+    .text-center {
+        text-align:center;
+    }
+    .menu-items {
+        float:right;
+    }
+    .icons-set{
+        float:left;
+    }
+    .logo-box {
+        padding:18px 0px;
+    }
+    .menu-items {
+        float: none;
+        padding: 10px 0px;
+        width: 100%
+    }
+    .icons-set{
+        float: left;
+        position: absolute;
+        top: 0;
+        left: 15px;
+    }
+    .nav-text {
+        text-align: right;
+    }
+    .search-form {
+        display: flex;
+    }
+    .dropdown-menu {
+        position: absolute;
+        right: 0;
+        z-index: 1;
+        display: none;
+        float: right;
+        min-width: auto;
+        padding: 0px;
+        margin: 12px 0 0;
+        font-size: 12px;
+        color: #847577;
+        text-align: right;
+        list-style: none;
+        background-clip: padding-box;
+        border: 0px;
+        border-radius: 0px;
+        background-color: #fff;
+        box-shadow: 0px 1px 1px 0px rgba(0, 0, 0, 0.02);
+    }
+    .dropdown-menu a {
+        background-color: #fff;
+    }
+    .form-inline {
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+        -webkit-box-orient: horizontal;
+        -webkit-box-direction: normal;
+        -ms-flex-flow: row wrap;
+        flex-flow: row wrap;
+        -webkit-box-align: center;
+        -ms-flex-align: center;
+        align-items: center;
+        padding: 10px;
+    }
+    .form-inline .form-control {
+        display: inline-block;
+        width: auto;
+        vertical-align: middle;
+    }
+    .left-text-b {
+        display:none;
+    }
+    .owl-theme .owl-nav .owl-prev {
+        bottom:80px;
+    }
+    .owl-theme .owl-nav .owl-next {
+        bottom: 80px;
+    }
+    .resto-item .resto-location {
+        font-size:14px;
+        font-weight:400;
+        color:#847577;
+        padding: 17px 0px;
+        text-align: right;
+    }
+    .menu-btn {
+        padding: 17px 0px;
+        text-align:right;
+    }
+    .treading-sellers {
+        margin-top: 80px;
+    }
+    .pocket-block-preview .pocket-items {
+        padding:80px 0px;
+    }
+    .pocket-block-preview .mobile-image {
+        display:none;
+    }
+    .language {
+        float:right;
+        padding-top: 0px;
+        padding-bottom: 30px;
+    }
+    .footer .link-title {
+        padding-top:57px;
+        padding-bottom:0px;
+    }
+    .footer .social-btns {
+        padding-top: 22px;
+        padding-bottom: 50px;
+    }
+    .footer .cards {
+        text-align:center;
+        padding-top: 10px;
+        padding-bottom: 6px;
+    }
+    .footer .privacy-terms li {
+        display:inline;
+        padding:0px 15px;
+    }
+    .footer .privacy-terms {
+        padding: 12px 0px;
+        text-align:center;
+
+    }
+    .treading-item .menu-btn {
+        padding-top: 30px;
+        left: 0;
+    }
+    .title-bar .left-title-text {
+        padding-top: 26px;
+        padding-bottom: 0px;
+        text-align:center;
+    }
+    .title-bar .right-title-text{
+        text-align:center;
+        padding-top:10px;
+        padding-bottom: 28px;
+    }
+    .app-block-preview .about-video {
+        padding-top:50px;
+    }
+    .view-restaurants {
+        text-align: right;
+        padding-top: 40px;
+        padding-bottom: 20px;
+    }
+    .category-recipes .recipe-feed-carousel .owl-stage-outer {
+        overflow: hidden;
+
+    }
+    .video-9 .top-items {
+        position: absolute;
+        top: 20px;
+        float: none;
+        width: 100%;
+    }
+    .video-9 .top-items .views {
+        margin-right: 20px;
+    }
+    .video-9 .top-items .video-time {
+        margin-right: 20px;
+    }
+    .video-9 .bottom-items {
+        bottom: 20px;
+    }
+    .video-9 .bottom-items .video-title {
+        margin-right: 20px;
+    }
+    .video-9 .bottom-items .published {
+        margin-left: 20px;
+    }
+    .submit-btn {
+        margin-right: 0px;
+        margin-top:20px;
+    }
+    .post-input {
+        width: 100%;
+        margin-right: 0px;
+        margin-top: 20px;
+    }
+    .reply-btn {
+        margin-right: 0px;
+        margin-top:20px;
+    }
+    .reply-input {
+        width: 100%;
+        margin-right: 0px;
+        margin-top: 20px;
+    }
+    .menu-img-view img {
+        border-radius: 3px;
+        margin-bottom: 27px;
+        width: 100%;
+        margin-top: 20px;
+    }
+    .tabs-left > .nav-tabs {
+        display: block;
+    }
+    .pm-left {
+        padding-right:15px;
+    }
+    .pm-right {
+        padding-left:15px;
+    }
+    .meal-list img {
+        width: 130px;
+        height: 130px;
+        float: right;
+    }
+    .my-checkout h3 {
+        margin-left: 40px;
+    }
+    .my-checkout ins {
+        margin-right: 45px;
+    }
+    .yf-location li {
+        line-height:24px;
+    }
+    .for-restaurant {
+        margin-top:30px;
+    }
+    .add-time-btn {
+        margin-top:0px;
+    }
+    .selected-time {
+        margin-top: 30px;
+    }
+    .login-form {
+        padding-right: 30px;
+        padding-left: 30px;
+        text-align:center;
+    }
+    .login-img {
+        display:none;
+    }
+    .event-picy {
+        float:right;
+        width:100%;
+    }
+    .event-dt {
+        padding: 20px;
+        margin-right: 0px;
+        float:right;
+    }
+    .lr-margin {
+        margin:0px 5px;
+    }
+    .event-right {
+        float: right;
+        margin-top: 30px;
+        width:100%;
+    }
+    .event-input {
+        width: 100%;
+        margin-right:0;
+        margin-top:20px;
+    }
+    .faq .accordion:after {
+        display:none;
+    }
+    .faq .active:after {
+        display:none;
+    }
+    .timeline {
+        margin-top: 50px;
+    }
+    .suggested-peoples {
+        display: block;
+    }
+    .timeline {
+        margin-bottom: 80px;
+    }
+    .delivery-men {
+        margin-top: 50px;
+    }
+    .profile-about {
+        margin-bottom: 80px;
+        margin-top:50px;
+    }
+    .show-map-result {
+        display: block;
+    }
+    .popular-restaurants {
+        display: block;
+    }
+    .google-ads {
+        display: block;
+    }
+    .offer-order {
+        float: right;
+        position: relative;
+        padding: 13px 10px 50px;
+    }
+    .like-comments {
+        float: right;
+    }
+    .like-comments > ul li {
+        line-height: 0px;
+        margin-left: 10px;
+        margin-top: 30px;
+        margin-right: 10px;
+    }
+    .right-side-btns {
+        display: flex;
+        float: right;
+        padding: 11px 0px;
+    }
+    .contact-info {
+        margin-bottom: 0px;
+    }
+    .w-xl-100{
+        width: 100%!important;
+    }
+}
+
+/************************* 320px *************************/
+@media (max-width:479px) {
+    .text-center {
+        text-align:center;
+    }
+    .text-center {
+        text-align:center;
+    }
+    .menu-items {
+        float:right;
+    }
+    .icons-set{
+        float:left;
+    }
+    .logo-box {
+        padding:5px;
+    }
+    .b-btn {
+        padding:15px 17px;
+
+    }
+    .partner-btn {
+        display:none;
+    }
+    .menu-items {
+        float: none;
+        padding: 10px 0px;
+        width: 100%;
+    }
+    .icons-set{
+        float: left;
+        padding: 18px 0px;
+        position: absolute;
+        top: 0;
+        left: 15px;
+    }
+    .nav-text {
+        text-align: right;
+    }
+    .dropdown-menu {
+        position: absolute;
+        right: 0;
+        z-index: 1;
+        display: none;
+        float: right;
+        min-width: auto;
+        padding: 0px;
+        margin: 12px 0 0;
+        font-size: 12px;
+        color: #847577;
+        text-align: right;
+        list-style: none;
+        background-clip: padding-box;
+        border: 0px;
+        border-radius: 0px;
+        background-color: #fff;
+        box-shadow: 0px 1px 1px 0px rgba(0, 0, 0, 0.02);
+    }
+    .dropdown-menu a {
+        background-color: #fff;
+    }
+    .dropdown-menu a:hover {
+        background-color: #f3f3f3;
+    }
+    .form-inline {
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+        -webkit-box-orient: horizontal;
+        -webkit-box-direction: normal;
+        -ms-flex-flow: row wrap;
+        flex-flow: row wrap;
+        -webkit-box-align: center;
+        -ms-flex-align: center;
+        align-items: center;
+        padding: 10px;
+    }
+    .form-inline .form-control {
+        display: inline-block;
+        width: auto;
+        vertical-align: middle;
+    }
+    .left-text-b {
+        display:none;
+    }
+    .owl-theme .owl-nav .owl-prev {
+        bottom:80px;
+    }
+    .owl-theme .owl-nav .owl-next {
+        bottom: 80px;
+    }
+    .resto-item .resto-location {
+        font-size:14px;
+        font-weight:400;
+        color:#847577;
+        padding: 17px 0px;
+        text-align: right;
+    }
+    .menu-btn {
+        padding: 17px 0px;
+        text-align:right;
+    }
+    .treading-sellers {
+        margin-top: 80px;
+    }
+    .pocket-block-preview .pocket-items {
+        padding:80px 0px;
+    }
+    .pocket-block-preview .mobile-image {
+        display:none;
+    }
+    .language {
+        float:right;
+        padding-top: 0px;
+        padding-bottom: 30px;
+    }
+    .footer .link-title {
+        padding-top:57px;
+        padding-bottom:0px;
+    }
+    .footer .social-btns {
+        padding-top: 22px;
+        padding-bottom: 50px;
+    }
+    .footer .cards {
+        text-align:center;
+        padding-top: 10px;
+        padding-bottom: 6px;
+    }
+    .footer .privacy-terms li {
+        display:inline;
+        padding:0px 15px;
+    }
+    .footer .privacy-terms {
+        padding: 12px 0px;
+        text-align:center;
+
+    }
+    .treading-item .menu-btn {
+        padding-top: 30px;
+        left: 0;
+    }
+    .title-bar .left-title-text {
+        padding-top: 26px;
+        padding-bottom: 0px;
+        text-align:center;
+    }
+    .title-bar .right-title-text{
+        text-align:center;
+        padding-top:10px;
+        padding-bottom: 28px;
+    }
+    .app-block-preview .about-video {
+        padding-top:50px;
+    }
+    .view-restaurants {
+        text-align: right;
+        padding-top: 40px;
+        padding-bottom: 20px;
+    }
+    .category-recipes .recipe-feed-carousel .owl-stage-outer {
+        overflow: hidden;
+
+    }
+    .video-9 .top-items {
+        position: absolute;
+        top: 20px;
+        float: none;
+        width: 100%;
+    }
+    .video-9 .top-items .views {
+        margin-right: 20px;
+    }
+    .video-9 .top-items .video-time {
+        margin-right: 20px;
+    }
+    .video-9 .bottom-items {
+        bottom: 20px;
+    }
+    .video-9 .bottom-items .video-title {
+        margin-right: 20px;
+    }
+    .video-9 .bottom-items .published {
+        margin-left: 20px;
+    }
+    .right-side-btns .follow-btn > button {
+        display:none;
+    }
+    .title-share .share {
+        float: right;
+        padding-bottom: 15px;
+    }
+    .title-share .title {
+        Float: right;
+        font-size: 24px;
+        line-height: 15px;
+    }
+    .like-comments {
+        float:right;
+    }
+    .like-comments > ul li {
+        line-height: 0px;
+        margin-left: 10px;
+        margin-top: 30px;
+        margin-right: 10px;
+    }
+    .submit-btn {
+        margin-right: 0px;
+        margin-top:20px;
+    }
+    .post-input {
+        width: 100%;
+        margin-right: 0px;
+        margin-top: 20px;
+    }
+    .reply-btn {
+        margin-right: 0px;
+        margin-top:20px;
+    }
+    .reply-input {
+        width: 100%;
+        margin-right: 0px;
+        margin-top: 20px;
+    }
+    .rating-input {
+        margin-right: 0px;
+        width: 100%;
+    }
+    .rating-btn {
+        margin-right: 0px;
+    }
+    .main-comments .user-detail-heading {
+        float: right;
+        width: 70%;
+        display: flex;
+    }
+    .main-comments .reply-time {
+        float: right;
+        padding: 19px 0px 0px;
+        display: flex;
+    }
+    .comment-input-1 {
+        width: 100%;
+        margin-right: 0;
+        margin-top: 18px;
+    }
+    .partner-name {
+        float: right;
+        margin-top: 20px;
+        margin-right: 0px;
+    }
+    .online-offline p {
+        margin-top: 22px;
+    }
+    .bookmark {
+        float: right;
+        margin-top: 8px;
+    }
+    .offer-order {
+        float: right;
+        position: relative;
+        padding: 13px 10px 50px;
+    }
+    .menu-img-view img {
+        border-radius: 3px;
+        margin-bottom: 27px;
+        width: 100%;
+        margin-top: 20px;
+    }
+    .tabs-left > .nav-tabs {
+        display: block;
+    }
+    .pm-left {
+        padding-right:15px;
+    }
+    .pm-right {
+        padding-left:15px;
+    }
+    .meal-list img {
+        width: 130px;
+        height: 130px;
+        float: right;
+    }
+    .description-area {
+        width: 100%;
+        margin-right: 0px;
+    }
+    .add-image {
+        margin-right:0px;
+    }
+    .images {
+        margin-right:0px;
+    }
+    .comment-input {
+        width: 100%;
+        margin-right: 0px;
+        margin-top: 20px;
+
+    }
+    .my-checkout h3 {
+        margin-left: 0px;
+    }
+    .my-checkout ins {
+        margin-right: 70px;
+    }
+    .yf-location li {
+        line-height:24px;
+    }
+    .for-restaurant {
+        margin-top:30px;
+    }
+    .add-time-btn {
+        margin-top:0px;
+    }
+    .selected-time {
+        margin-top: 30px;
+    }
+    .login-img {
+        display:none;
+    }
+    .login-form {
+        padding-right: 30px;
+        padding-left: 30px;
+        text-align:center;
+    }
+    .event-picy {
+        float:right;
+        width:100%;
+    }
+    .event-dt {
+        padding: 20px;
+        margin-right: 0px;
+        float:right;
+    }
+    .lr-margin {
+        margin:0px 3px;
+    }
+    .count-time {
+        height:60px;
+        width:70px;
+        padding: 4px 0;
+    }
+    .count-time span {
+        font-size: 18px;
+    }
+    .event-right {
+        float: right;
+        margin-top: 30px;
+        width:100%;
+    }
+    .event-input {
+        width: 100%;
+        margin-right:0;
+        margin-top:20px;
+    }
+    .faq .accordion:after {
+        display:none;
+    }
+    .faq .active:after {
+        display:none;
+    }
+    .profile-all-dt {
+        margin-top:138px;
+    }
+    .profile-name-dt {
+        margin-right: 0px;
+        padding: 0;
+    }
+    .profile-dt {
+        float:right;
+        padding: 0;
+        width: 100%;
+        margin-bottom: 20px;
+    }
+    .profile-dt li {
+        display: block;
+        margin:0;
+    }
+    .timeline {
+        margin-top: 50px;
+    }
+    .suggested-peoples {
+        display: block;
+    }
+    .timeline {
+        margin-bottom: 80px;
+    }
+    .delivery-men {
+        margin-top: 50px;
+    }
+    .profile-about {
+        margin-bottom: 80px;
+        margin-top:50px;
+    }
+    .show-map-result {
+        display: block;
+    }
+    .popular-restaurants {
+        display: block;
+    }
+    .google-ads {
+        display: block;
+    }
+    .contact-info {
+        margin-bottom: 0;
+    }
+    .partner-bottombar li {
+        width: 32.233%!important;
+    }
+    .partner-bottombar li a {
+        font-size: 13px!important;
+    }
+    .trace-btn {
+        width: 100%!important;
+        font-size: 10px!important;
+    }
+    .name-location p {
+        font-size: 13px!important;
+    }
+}

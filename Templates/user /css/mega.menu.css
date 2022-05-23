@@ -1,0 +1,17 @@
+/*
+
+Template: Natto - Online Food Ordering Social Networking HTML Template
+
+Note: This is Mega Menu Css. 
+
+*/
+
+.mega-menu{
+	width:800px;
+	overflow:hidden;
+	padding:0px;
+}
+.navbar-expand-lg .navbar-nav .dropdown-menu-right {
+    right: -371px;
+    left: 0;
+}
