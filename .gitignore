@@ -2,7 +2,9 @@
 *.mwb*
 Proposal/
 webapp_restuarant/staticfiles/
-
+.editorconfig
+webapp_restuarant/.pre-commit-config.yaml
+.vscode
 #Django and logs
 *.log
 *.pot
@@ -152,3 +154,4 @@ venv.bak/
 #  and can be added to the global gitignore or merged into this file.  For a more nuclear
 #  option (not recommended) you can uncomment the following to ignore the entire idea folder.
 #.idea/
+

@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     "pages",
     "panel",
     "user",
+    "debug_toolbar",
 ]
 
 MIDDLEWARE = [
@@ -54,6 +55,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "debug_toolbar.middleware.DebugToolbarMiddleware",
 ]
 
 ROOT_URLCONF = "webapp_restuarant.urls"
@@ -120,19 +122,21 @@ USE_TZ = True
 
 
 # Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/4.0/howto/static-files/
 STATICFILES_DIRS = [
     BASE_DIR / "static",
-    # '/var/www/static/',
 ]
+# dir that collect static will put static file in
 STATIC_ROOT = os.path.join(BASE_DIR, "static_files")
+# url that statics will serve on
 STATIC_URL = "/static/"
+# url that will server medai(uploaded from users)
 MEDIA_URL = "/media/"
+# folder that files uploaded from users go in
 MEDIA_ROOT = os.path.join(BASE_DIR, "uploads")
 
+# log setting
 LOG_DIR = "logs"
 LOGGING_LEVEL = "DEBUG"
-
 LOGGING = {
     "version": 1,
     "disable_existing_loggers": False,
@@ -140,13 +144,13 @@ LOGGING = {
         "file_general": {
             "level": LOGGING_LEVEL,
             "class": "logging.FileHandler",
-            "filename": str(BASE_DIR / LOG_DIR / "/general.log"),
+            "filename": os.path.join(BASE_DIR, LOG_DIR, "general.log"),
             "formatter": "file",
         },
         "file_app": {
             "level": LOGGING_LEVEL,
             "class": "logging.FileHandler",
-            "filename": str(BASE_DIR / LOG_DIR / "/app.log"),
+            "filename": os.path.join(BASE_DIR, LOG_DIR, "app.log"),
             "formatter": "file",
         },
         "console": {
@@ -174,3 +178,8 @@ LOGGING = {
 
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+INTERNAL_IPS = [
+    # ...
+    "127.0.0.1",
+    # ...
+]
