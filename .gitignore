@@ -1,7 +1,15 @@
 #custom stuff
 *.mwb*
 Proposal/
+webapp_restuarant/staticfiles/
 
+#Django and logs
+*.log
+*.pot
+*.pyc
+__pycache__/
+db.sqlite3
+db.sqlite3-journal
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
