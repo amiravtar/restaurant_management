@@ -1,0 +1,1 @@
+[{"model": "restaurant.restaurant", "pk": 1, "fields": {"name": "رستوران ۱", "image": "", "admin": 1, "address": "آدرس رستوران شماره ۱", "phone": "09130000000", "deliver_fee": null, "is_delivery_available": true, "is_open": true, "open_hour": "06:00:00", "close_hour": "18:00:00", "description": ""}}]
