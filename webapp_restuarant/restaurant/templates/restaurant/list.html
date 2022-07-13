@@ -1,0 +1,117 @@
+{% extends 'base/base.html' %}
+{% load static %}
+{% block content %}
+  <!--title-bar start-->
+  <section class="block-preview">
+    <div class="cover-banner"
+         style="background-image: url(images/homepage/banner.jpg)"></div>
+    <div class="container">
+      <div class="row"></div>
+    </div>
+  </section>
+  <!--banner end-->
+  <!--how-to-work start-->
+  <section class="how-to-work">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-4 col-sm-12 col-xs-12">
+          <div class="work-item">
+            <div class="work-img">
+              <img src="{% static 'user/images/homepage/howto/img_1.svg' %}" alt="">
+            </div>
+            <div class="work-text">
+              <h4>رستوران غذای مورد نظر را وارد کنید</h4>
+              <p>
+                منوی مورد علاقه‌ی خود را از بین رستوران های غذا انتخاب کنید.
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4 col-sm-12 col-xs-12">
+          <div class="work-item">
+            <div class="work-img">
+              <img src="{% static 'user/images/homepage/howto/img_2.svg' %}" alt="">
+            </div>
+            <div class="work-text">
+              <h4>غذای خود را انتخاب کنید</h4>
+              <p>
+                غذایی که می‌خواهید را انتخاب کنید و سفارش خود را ثبت کنید.
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4 col-sm-12 col-xs-12">
+          <div class="work-item">
+            <div class="work-img">
+              <img src="{% static 'user/images/homepage/howto/img_3.svg' %}" alt="">
+            </div>
+            <div class="work-text">
+              <h4>غذایتان را نوش‌جان کنید</h4>
+              <p>
+                درب منزل یا حضوری از خود رستوران سفارشتان را تحویل بگیرید.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!--how-to-work end-->
+  <!--select resturant start-->
+  <section class="order-food-online mt-6">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="new-heading">
+            <h1>لطفا رستوران غذای مورد نظرتان را انتخاب کنید</h1>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        {% for restaurant in object_list %}
+          <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12">
+            <div class="all-meal" style="height:95%;">
+              <div class="top">
+                <a href="restaurant_detail.html">
+                  <div class="bg-gradient"></div>
+                </a>
+                <div class="top-img">
+                  {% if restaurant.image %}
+                    <img src="{{ restaurant.image.url }}" alt="">
+                  {% else %}
+                    <img src="{% static 'user/images/default_image.jpg' %}" alt="">
+                  {% endif %}
+                </div>
+                <div class="top-text">
+                  <div class="sub-heading">
+                    <h5>
+                      <a href="restaurant_detail.html">{{ restaurant.name }}</a>
+                    </h5>
+                  </div>
+                </div>
+              </div>
+              <div class="bottom">
+                <div class="bottom-text">
+                  <div class="time">
+                    <i class="fa fa-map-marker-alt"></i> {{ restaurant.address }}
+                  </div>
+                  <div class="partner-bottombar" bac>
+                    <ul class="bottom-partner-links">
+                      <li>
+                        <a href="restaurant_detail.html"
+                           data-toggle="tooltip"
+                           data-placement="top"
+                           title="View Menu"><i class="fas fa-book"></i> مشاهده منو</a>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock content %}

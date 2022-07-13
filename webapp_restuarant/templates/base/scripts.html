@@ -1,0 +1,27 @@
+{% load static %}
+<!--Core plugin JavaScript-->
+{% comment %} <script src="{% static 'user/vendor/jquery/jquery.min.js' %}"></script> {% endcomment %}
+<script src="{% static 'user/vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+<script src="{% static 'user/vendor/jquery-easing/jquery.easing.min.js' %}"></script>
+<script src="{% static 'user/js/owlslider.js' %}"></script>
+<script src="{% static 'user/js/toastr/toastr.min.js' %}"></script>
+
+<script>
+    function numberWithCommas(x) {
+            return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
+    $( document ).ready(function() {
+
+       let hash=$(location).attr('hash');
+       if (hash.trim()!=""){
+           $(hash).trigger( "click");
+       }
+       {% if messages %}
+            {% for message in messages %}
+                {% if message.tags %}
+                    toastr.{{message.tags}}('{{ message }}', '', {timeOut: 5000})
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+    });
+</script>

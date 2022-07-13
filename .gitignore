@@ -1,10 +1,12 @@
 #custom stuff
 *.mwb*
 Proposal/
-webapp_restuarant/staticfiles/
+webapp_restuarant/static_files/
 .editorconfig
 webapp_restuarant/.pre-commit-config.yaml
 .vscode
+Templates
+webapp_restuarant/uploads/
 #Django and logs
 *.log
 *.pot
