@@ -5,4 +5,7 @@ from django.views import View
 
 
 class Index(View):
-    pass
+    template_name = "prelogin/index.html"
+
+    def get(self, request):
+        return render(request, self.template_name)

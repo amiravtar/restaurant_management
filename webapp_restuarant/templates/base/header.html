@@ -7,10 +7,9 @@
           <div class="topbar-right text-center text-md-right">
             <ul class="list-inline">
               {% comment %} ites auth user so get_full_name {% endcomment %}
-              <li><i class="far fa-notes"></i>خوش آمیدید {{request.user.get_full_name}}</li>
+              <li><i class="far fa-notes"></i>خوش آمدید {{request.user.get_full_name}}</li>
               <li><a href="{% url 'user:Profile' %}#my-orders-btn"><i class="far fa-calendar-alt"></i>لیست سفارش ها</a> </li>
-              <li><a href="{% url 'restaurant:Checkout' %}"><i class="fas fa-shopping-cart"></i>سبد خرید <span
-                    class="badge badge-secondary">3</span></a></li>
+              <li><a href="{% url 'restaurant:Checkout' %}"><i class="fas fa-shopping-cart"></i>سبد خرید</a></li>
 
               <li class="nav-item dropdown">
                 <a class="dropdown-toggle-no-caret" href="#" id="accountDropdown" role="button"
