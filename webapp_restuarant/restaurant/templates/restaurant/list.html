@@ -72,7 +72,7 @@
           <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12">
             <div class="all-meal" style="height:95%;">
               <div class="top">
-                <a href="restaurant_detail.html">
+                <a href="{{ restaurant.get_absolute_url }}">
                   <div class="bg-gradient"></div>
                 </a>
                 <div class="top-img">
@@ -85,7 +85,7 @@
                 <div class="top-text">
                   <div class="sub-heading">
                     <h5>
-                      <a href="restaurant_detail.html">{{ restaurant.name }}</a>
+                      <a href="{{ restaurant.get_absolute_url }}">{{ restaurant.name }}</a>
                     </h5>
                   </div>
                 </div>
@@ -98,7 +98,7 @@
                   <div class="partner-bottombar" bac>
                     <ul class="bottom-partner-links">
                       <li>
-                        <a href="restaurant_detail.html"
+                        <a href="{{ restaurant.get_absolute_url }}"
                            data-toggle="tooltip"
                            data-placement="top"
                            title="View Menu"><i class="fas fa-book"></i> مشاهده منو</a>

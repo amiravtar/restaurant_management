@@ -2394,7 +2394,6 @@ i.icon-delivery-bike {
     margin-bottom:5px;
 }
 .name-location h1 {
-    color: #fff;
     font-size: 24px;
     font-weight: 600;
     line-height: 24px;
@@ -2408,7 +2407,6 @@ i.icon-delivery-bike {
     font-size: 16px;
     font-weight: 400;
     line-height: 24px;
-    color: #ffff
 }
 .right-side-btns {
     display:flex;
@@ -3818,9 +3816,7 @@ i.icon-delivery-bike {
 .order-tabs .nav-tabs {
     border: none;
 }
-.meal-tab-icons img {
-    height:30px;
-}
+
 .meal-tab-icons img:hover {
     -webkit-transform: rotateY(360deg);
     -ms-transform: rotateY(360deg);

@@ -1,10 +1,13 @@
 from django.db import models
+from django.urls import reverse_lazy
 
 
 def restaurant_directory_path(instance, filename):
     "Generate restaurant image path"
     # file will be uploaded to MEDIA_ROOT/user_<id>/<filename>
-    return "restaurants/{0}/{0}_profile.{1}".format(instance.id, filename.split(".")[-1])
+    return "restaurants/{0}/{0}_profile.{1}".format(
+        instance.id, filename.split(".")[-1]
+    )
 
 
 # Create your models here.
@@ -37,6 +40,35 @@ class Restaurant(models.Model):
     def __str__(self):
         return self.name
 
+    def get_absolute_url(self):
+        return reverse_lazy("restaurant:Menu", kwargs={"pk": self.pk})
+
+    @property
+    def get_foods_category(self):
+        di = set()
+        if self.foods:
+            for i in self.foods.all():
+                di.add(i.category.name)
+        return " , ".join(di)
+
+    @property
+    def get_open_hour(self):
+        if self.open_hour:
+            return self.open_hour.strftime("%H:%M")
+
+    @property
+    def get_close_hour(self):
+        if self.close_hour:
+            return self.close_hour.strftime("%H:%M")
+
+    @property
+    def get_foods_category_list(self):
+        di = set()
+        if self.foods:
+            for i in self.foods.all():
+                di.add(i.category)
+        return di
+
 
 class Driver(models.Model):
     user = models.ForeignKey("user.User", on_delete=models.CASCADE)
@@ -49,4 +81,5 @@ class Driver(models.Model):
 
     def __str__(self):
         return " | ".join([self.FullName, self.restaurant.name])
-    #TODO:asdasd
+
+    # TODO:asdasd

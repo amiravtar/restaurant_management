@@ -38,9 +38,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-
-    'jalali_date',
-
+    "jalali_date",
     "deliver",
     "food",
     "order",
@@ -48,9 +46,6 @@ INSTALLED_APPS = [
     "pages",
     "panel",
     "user",
-
-
-
     "debug_toolbar",
 ]
 
@@ -125,7 +120,7 @@ TIME_ZONE = "Asia/Tehran"
 
 USE_I18N = False
 
-USE_TZ = True
+USE_TZ = False
 
 
 # Static files (CSS, JavaScript, Images)
@@ -197,14 +192,14 @@ LOGOUT_REDIRECT_URL = reverse_lazy("user:Login")
 
 # default settings for Jalali date plugin
 JALALI_DATE_DEFAULTS = {
-   'Strftime': {
-        'date': '%y/%m/%d',
-        'datetime': '%H:%M:%S _ %y/%m/%d',
+    "Strftime": {
+        "date": "%y/%m/%d",
+        "datetime": "%H:%M:%S _ %y/%m/%d",
     },
-    'Static': {
-        'js': [
+    "Static": {
+        "js": [
             # loading datepicker
-            'admin/js/django_jalali.min.js',
+            "admin/js/django_jalali.min.js",
             # OR
             # 'admin/jquery.ui.datepicker.jalali/scripts/jquery.ui.core.js',
             # 'admin/jquery.ui.datepicker.jalali/scripts/calendar.js',
@@ -212,10 +207,10 @@ JALALI_DATE_DEFAULTS = {
             # 'admin/jquery.ui.datepicker.jalali/scripts/jquery.ui.datepicker-cc-fa.js',
             # 'admin/js/main.js',
         ],
-        'css': {
-            'all': [
-                'admin/jquery.ui.datepicker.jalali/themes/base/jquery-ui.min.css',
+        "css": {
+            "all": [
+                "admin/jquery.ui.datepicker.jalali/themes/base/jquery-ui.min.css",
             ]
-        }
+        },
     },
 }

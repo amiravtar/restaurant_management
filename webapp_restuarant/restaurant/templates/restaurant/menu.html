@@ -1,0 +1,411 @@
+{% extends 'base/base.html' %}
+{% load static %}
+{% block content %}
+  <!--banner start-->
+  <section class="block-preview">
+    <div class="cover-banner"
+         style="background-image: url(images/homepage/banner.jpg)"></div>
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-12">
+          <div class="resto-dt pt-6 pb-6">
+            <div class="resto-detail">
+              <div class="resto-picy">
+                <a href="restaurant_detail.html">
+                  <img src="images/homepage/meals/logo-2.jpg" alt="">
+                </a>
+              </div>
+              <div class="name-location">
+                <a href="#" class="text-light">
+                  <h1>{{ restaurant.name }}</h1>
+                </a>
+                <p>
+                  <span><i class="fas fa-map-marker-alt"></i></span>{{ restaurant.address }}
+                </p>
+                <p>
+                  <i class="fas fa-utensils text-yellow"></i> <span class="text-light pl-2"></span>نوع غذا ها : {{ restaurant.get_foods_category }}</span>
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!--banner end-->
+  <!--partner-restaurant start-->
+  <section class="all-partners">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-9 col-md-12">
+          <div class="all-tabs">
+            <ul class="nav nav-tabs">
+              <li class="nav-item">
+                <a href="#restaurant-menu" class="nav-link active" data-toggle="tab">منوی رستوران</a>
+              </li>
+              <li class="nav-item">
+                <a href="#restaurant-info" class="nav-link" data-toggle="tab">اطلاعات رستوران</a>
+              </li>
+            </ul>
+            <div class="tab-content">
+              <div class="tab-pane active" id="restaurant-menu">
+                <div class="restaurants-order-bg m-bottom">
+                  <div class="right-contact-dt">
+                    <h4>ثبت تاریخ</h4>
+                    <form>
+                      <div class="form-group">
+                        <div class="input-field">
+                          <select class="confirm-form"
+                                  id="order_date"
+                                  placeholder="تاریخ"
+                                  onchange="send_date();">
+                            {% for date in order_dates.all %}
+                              {% comment %} {% if order %}
+                                {% if order.order_date == date %}
+                                  <option value="{{ date.id }}" selected>
+                                  {% else %}
+                                    <option value="{{ date.id }}">
+                                    {% endif %} {% endcomment %}
+                                  {% comment %} {% else %} {% endcomment %}
+                                    <option value="{{ date.id }}">
+                                    {% comment %} {% endif %} {% endcomment %}
+                                    {{ date }}
+                                  </option>
+                                {% endfor %}
+                              </select>
+                            </div>
+                          </div>
+                        </form>
+                      </div>
+                      <div class="order-tabs">
+                        <ul class="nav nav-tabs">
+                          {% for cate in restaurant.get_foods_category_list %}
+                            <li>
+                              <a href="#id_{{ cate.id }}" data-toggle="tab">
+                                <div class="meal-tab-icons">
+                                  {% if cate.image %}
+                                    <img src="{{ cate.image.url }}" class="img-responsive" alt="">
+                                  {% else %}
+                                    <img src="{% static 'user/images/category/default.png' %}"
+                                         class="img-responsive"
+                                         alt="">
+                                  {% endif %}
+                                  <p>
+                                    {{ cate.name }}
+                                  </p>
+                                </div>
+                              </a>
+                            </li>
+                          {% endfor %}
+                        </ul>
+                      </div>
+                      <div class="tab-content" id="tab_foods"></div>
+                    </div>
+                  </div>
+                  <div class="tab-pane" id="restaurant-info">
+                    <div class="restaurants-detail-bg">
+                      <h4>اطلاعات رستوران</h4>
+                      <div class="overview-details">
+                        <div class="container">
+                          <div class="row">
+                            <div class="col-md-6">
+                              <div class="flex-dt">
+                                <ul class="view-dt">
+                                  <li>{{ restaurant.name }}</li>
+                                  <li>
+                                    <address> <i class="fa fa-map-marker-alt"></i>{{ restaurant.address }}</address>
+                                  </li>
+                                  <li>{{ restaurant.phone }}</li>
+                                </ul>
+                              </div>
+                            </div>
+                            <div class="col-md-6">
+                              <div class="flex-dt">
+                                <ul class="view-dt">
+                                  <li>ساعت باز شدن {{ restaurant.get_open_hour }}</li>
+                                  <li>ساعت بسته شدن {{ restaurant.get_close_hour }}</li>
+                                </ul>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="restaurants-detail-bg">
+                      <h4>توضیحات:</h4>
+                      <p>
+                        {{ restaurant.description }}
+                      </p>
+                    </div>
+                    <div class="ads-offer"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-3 col-md-3">
+              <div class="right-side">
+                <div class="dt-detail box-dt-detail">
+                  <ul>
+                    <li>
+                      <div class="delivery">
+                        <i class="fas fa-shopping-cart"></i> سبد خرید
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+                <div id="cart">
+                  {% comment %} {% if order %}
+              {% for food in order.foods.all %}
+              <div class="Qty" id="cart_item_{{food.food.id}}" data-id="{{food.food.id}}">
+                <h4 id="cart_item_{{food.food.id}}_name">{{food.food.name}}</h4>
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <button class="minus-btn btn-sm" id="minus-btn" onclick="cart_minu(this)"><i \ class="fas fa-minus"></i></button>
+                    </div>
+                    <div id="cart_item_{{food.food.id}}_count" class="qty-control">{{food.count}}</div>
+                    <div class="input-group-prepend">
+                        <button class="add-btn btn-sm" id="plus-btn" onclick="cart_plus(this)"><i \ class="fas fa-plus"></i></button>
+                    </div>
+                </div>
+              {% endfor %}
+                  {% endif %} {% endcomment %}
+                </div>
+              </div>
+              <div class="total-cost mb-3">
+                <div class="mt-3">
+                  <span class="text-dark font-weight-bold">جمع سفارش</span> <span class="float-left text-dark"><span id="cart_price" data-price="0">۰</span>تومان</span>
+                </div>
+              </div>
+              <div class="box-textarea-container">
+                <div class="basket-header">
+                  <i class="fa fa-pencil-alt"></i> برای رستوران یادداشتی دارید؟ اینجا بنویسید...
+                </div>
+                <textarea id="order_comment"
+                          maxlength="1024"
+                          class="form-control order_comment"
+                          placeholder="اگر پیشنهادی درمورد نحوه&zwnj;ی ارسال یا سفارش خود دارید، در این قسمت بنویسید."></textarea>
+              </div>
+              <div class="order-now-check">
+                <button class="on-btn btn-link" onclick="Checkout();">بررسی نهایی</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    {% csrf_token %}
+    <script>
+  cart_foods = {};
+
+  function UpdateCart() {
+    price = 0;
+    for (const [key, value] of Object.entries(cart_foods)) {
+      price += value["price"] * value["count"];
+      if ($("#cart_item_" + key).length) {
+        $("#cart_item_" + key + "_count").text(value["count"]);
+      } else {
+        AddElementToCart(value, key);
+      }
+    }
+    $("#cart_price").data("price", price);
+    $("#cart_price").text(numberWithCommas(price));
+  }
+
+  function AddElementToCart(food, key) {
+    elem = '\
+        <div class="Qty" id="cart_item_' + key + '" data-id="' + key + '">\
+            <h4 id="cart_item_' + key + '_name">' + food["name"] + '</h4>\
+            <div class="input-group">\
+                <div class="input-group-prepend">\
+                    <button class="minus-btn btn-sm" id="minus-btn" onclick="cart_minu(this)"><i \ class="fas fa-minus"></i></button>\
+                </div>\
+                <div id="cart_item_' + key + '_count" class="qty-control">' + food["count"] + '</div>\
+                <div class="input-group-prepend">\
+                    <button class="add-btn btn-sm" id="plus-btn" onclick="cart_plus(this)"><i \ class="fas fa-plus"></i></button>\
+                </div>\
+            </div>\
+        </div>';
+    $("#cart").append(elem);
+  }
+
+
+  function DeleteElementFromCart(id) {
+    $("#cart_item_" + id).remove();
+  }
+
+  function cart_minu(sender) {
+    cart_item_ul = $(sender).parent().parent().parent();
+    cart_item_id = $(cart_item_ul).data("id");
+    if (cart_item_id in cart_foods) {
+      cart_foods[cart_item_id]["count"] -= 1;
+      if (cart_foods[cart_item_id]["count"] == 0) {
+        delete cart_foods[cart_item_id];
+        DeleteElementFromCart(cart_item_id);
+      }
+    }
+    UpdateCart();
+  }
+
+  function cart_plus(sender) {
+    cart_item_ul = $(sender).parent().parent().parent();
+    cart_item_id = $(cart_item_ul).data("id");
+    if (cart_item_id in cart_foods) {
+      if (cart_foods[food_id]["count"] >= cart_foods[food_id]["max_count"]) {
+        alert("حداکثر میتوانید " + cart_foods[food_id]["max_count"] + " از این غذا سفارش دهید");
+        return;
+      }
+      cart_foods[cart_item_id]["count"] += 1;
+    }
+    UpdateCart();
+  }
+
+  function AddToCart(sender) {
+    food_ul = $(sender).parent().parent().parent();
+    food_id = $(food_ul).data("id");
+    food_max_count = $(food_ul).data("count");
+    food_price = $("#" + $(food_ul).attr("id") + "_price").data("price");
+    food_name = $("#" + $(food_ul).attr("id") + "_name").text().trim();
+    if (food_id in cart_foods) {
+      if (cart_foods[food_id]["count"] >= food_max_count) {
+        alert("حداکثر میتوانید " + food_max_count + " از این غذا سفارش دهید");
+        return;
+      }
+      cart_foods[food_id]["count"] += 1;
+    } else {
+      cart_foods[food_id] = {
+        count: 1,
+        max_count: food_max_count,
+        price: food_price,
+        name: food_name
+      };
+    }
+    UpdateCart();
+  }
+
+  $(document).ready(function () {
+    send_date();
+
+  });
+  function send_date() {
+    const csrftoken = $("[name=csrfmiddlewaretoken]").val();
+    let select = $("#order_date").val();
+    $.ajax({
+      headers: {
+        'X-CSRFToken': csrftoken
+      },
+      type: "POST",
+      url: "{% url 'restaurant:Menu' restaurant.id %}",
+      data: { "date": select, "mod": "send_date" },
+      dataType: "json",
+      success: function (response) {
+        if (response["response"] == "success") {
+          var data = JSON.parse(response['data']);
+          console.log(data);
+          // Clear previos foods
+          $("#tab_foods").empty();
+          cart_foods = {};
+          UpdateCart();
+          {% comment %} //$("#cart").empty(); {% endcomment %}
+          var cate_counter = 1;
+          Object.keys(data).forEach(element => {
+            let cate_id = element;
+            let cate_name = data[element]["cate_name"];
+            var c1 = '';
+            let row = '';
+            data[element]["foods"].forEach(food => {
+              let count = food["count"];
+              let food_name = food["food"]["name"];
+              let food_image = food["food"]["image"];
+              let food_id = food["food"]["id"];
+              let food_price = food["food"]["price"];
+              let food_des = food["food"]["des"];
+              if (food_image == null) {
+                food_image = "{% static 'user/images/default_image.jpg' %}"
+              }
+              row += '<div class="col-md-6">\
+              <div class="meals-dt">\
+                <div class="meal-list">\
+                  <ul class="list-unstyled" id="food_'+ food_id + '" data-id="' + food_id + '" data-count="' + count + '">\
+                    <li>\
+                      <img src="'+ food_image + '" class="img-responsive" alt="image"\ title="image">\
+                      <div class="caption-meal">\
+                        <a>\
+                          <h4 id="food_'+ food_id + '_name" data-name="' + food_name + '">' + food_name + '</h4>\
+                        </a>\
+                        <p id="food_'+ food_id + '_price" data-price="' + food_price + '">\
+                          '+ numberWithCommas(food_price) + '<small class="fs-13">تومان</small>\
+                        </p>\
+                        <p"><small \ class="fs-5">'+ food_des + '</small>\
+                        </p>\
+                      </div>\
+                      <div class="star">\
+                        <span onclick="AddToCart(this)";><i class="fas fa-plus"></i></span>\
+                      </div>\
+                    </li>\
+                  </ul>\
+                </div>\
+              </div>\
+            </div>';
+
+            });
+
+            c1 = '<div class="tab-pane ' + (cate_counter == 1 ? "active" : "") + '"\ id="id_' + cate_id + '">\
+                  <div class="all-meals-tab">\
+                    <div class="all-meal-dt">\
+                      <div class="row">'+ row + '\</div>\
+                    </div>\
+                  </div>\
+                </div>';
+            $("#tab_foods").append(c1);
+            cate_counter++;
+          });
+
+        }
+      }
+    });
+  }
+
+  function Checkout() {
+    if (Object.keys(cart_foods).length) {
+      try {
+        data = { description: $("#order_comment").val(), "foods": cart_foods }
+        const csrftoken = $("[name=csrfmiddlewaretoken]").val();
+        $.ajax({
+          type: "post",
+          headers: {
+            'X-CSRFToken': csrftoken
+          },
+          url: "{% url 'restaurant:Menu' restaurant.id %}",
+          data: {
+            data: JSON.stringify(data),
+            mod: "checkout",
+            date: select = $("#order_date").val()
+          },
+          dataType: "json",
+          success: function (response) {
+            try {
+              if (response["response"] == "success") {
+
+                window.location.href = response["redirect"];
+              }
+              else {
+                toastr.error(response["error"], '', {
+                  timeOut: 5000
+                })
+              }
+            } catch {
+              toastr.error(response["error"], '', {
+                timeOut: 5000
+              })
+            }
+          }
+        });
+      } catch {
+
+      }
+    } else {
+      alert("غذایی انتخاب نکرده اید")
+    }
+  }
+    </script>
+  {% endblock content %}

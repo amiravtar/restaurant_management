@@ -1,5 +1,5 @@
 from django.db import models
-from  utils.date_persian import date_fromgregorian
+from utils.date_persian import date_fromgregorian
 import logging
 
 # Create your models here.
@@ -47,6 +47,7 @@ class OrderDate(models.Model):
 
     date = models.DateField(auto_now=False, auto_now_add=False, unique=True)
     foods = models.ManyToManyField(DateFoodCount, blank=True)
+    restaurant = models.ForeignKey("restaurant.Restaurant", on_delete=models.CASCADE)
 
     def __str__(self):
         return date_fromgregorian(self.date).strftime("%Y/%m/%d %b %a")
@@ -86,7 +87,10 @@ class Order(models.Model):
         "user.User", on_delete=models.CASCADE, verbose_name="کاربر"
     )
     restaurant = models.ForeignKey(
-        "restaurant.Restaurant", on_delete=models.CASCADE, related_name="orders",verbose_name="رستوران  "
+        "restaurant.Restaurant",
+        on_delete=models.CASCADE,
+        related_name="orders",
+        verbose_name="رستوران  ",
     )
     receive_type = models.CharField(
         max_length=20, blank=True, null=True, choices=RECEIVE_TYPE
@@ -117,7 +121,9 @@ class Order(models.Model):
         return " | ".join([self.restaurant.name, self.user.full_name, self.status])
 
     def get_order_date(self):
-        date = OrderDate.objects.filter(date=self.target_date)
+        date = OrderDate.objects.filter(
+            date=self.target_date, restaurant=self.restaurant
+        )
         if date.exists():
             self.order_date = date[0]
             self.save()
