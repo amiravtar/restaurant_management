@@ -1,4 +1,5 @@
 from django.db import models
+from  utils.date_persian import date_fromgregorian
 import logging
 
 # Create your models here.
@@ -48,7 +49,7 @@ class OrderDate(models.Model):
     foods = models.ManyToManyField(DateFoodCount, blank=True)
 
     def __str__(self):
-        return " | ".join([str(self.date)])
+        return date_fromgregorian(self.date).strftime("%Y/%m/%d %b %a")
 
 
 class Order(models.Model):
@@ -81,22 +82,34 @@ class Order(models.Model):
         (NOT_CONFIRM, "تایید نشده"),
     ]
 
-    user = models.ForeignKey("user.User", on_delete=models.CASCADE)
+    user = models.ForeignKey(
+        "user.User", on_delete=models.CASCADE, verbose_name="کاربر"
+    )
     restaurant = models.ForeignKey(
-        "restaurant.Restaurant", on_delete=models.CASCADE, related_name="orders"
+        "restaurant.Restaurant", on_delete=models.CASCADE, related_name="orders",verbose_name="رستوران  "
     )
     receive_type = models.CharField(
         max_length=20, blank=True, null=True, choices=RECEIVE_TYPE
     )
-    status = models.CharField(choices=ORDER_STATUS, max_length=50, default=TEMP)
+    status = models.CharField(
+        choices=ORDER_STATUS, max_length=50, default=TEMP, verbose_name="وضعیت"
+    )
 
-    description = models.TextField(null=True, blank=True)
-    foods = models.ManyToManyField(FoodCount, blank=True)
+    description = models.TextField(null=True, blank=True, verbose_name="توضیحات")
+    foods = models.ManyToManyField(FoodCount, blank=True, verbose_name="غذاها")
     created_on = models.DateTimeField(auto_now_add=True)
-    address = models.CharField(max_length=70, null=True, blank=True)
-    target_date = models.DateField(auto_now=False, auto_now_add=False)
+    address = models.CharField(
+        max_length=70, null=True, blank=True, verbose_name="آدرس گیرنده"
+    )
+    target_date = models.DateField(
+        auto_now=False, auto_now_add=False, verbose_name="تاریخ تحویل سفارش"
+    )
     order_date = models.ForeignKey(
-        OrderDate, on_delete=models.CASCADE, blank=True, null=True
+        OrderDate,
+        on_delete=models.CASCADE,
+        blank=True,
+        null=True,
+        verbose_name="تاریخ مرجع",
     )
 
     # Managers
