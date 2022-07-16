@@ -993,6 +993,9 @@ responsive CSS of the template.
         margin-right: 0px;
         padding: 0;
     }
+    .profile-name-dt img{
+        width: 150px;
+    }
     .profile-dt {
         float:right;
         padding: 0;

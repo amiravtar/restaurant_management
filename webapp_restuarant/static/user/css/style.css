@@ -6497,6 +6497,9 @@ button.faq-accordion i {
     float: right;
     padding: 27px 0;
 }
+.profile-name-dt img{
+    width: 150px;
+}
 .profile-name-dt h1{
     font-size:24px;
     font-weight:600;

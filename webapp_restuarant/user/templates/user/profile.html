@@ -1,0 +1,325 @@
+{% extends 'base/base.html' %}
+{% load static %}
+{% load user_filters %}
+{% load humanize %}
+{% block content %}
+    <!--title-bar start-->
+    <section class="title-bar">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="left-title-text">
+                        <h3>پروفایل کاربری</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</section>
+<!--title-bar end-->
+<!--my-account-tabs start-->
+<section class="all-profile-details" style="min-height: 650px;">
+    <div class="container">
+        <div class="row">
+            <!--my-account start-->
+            <section class="my-account">
+                <div class="profile-bg">
+                    <div class="my-Profile-dt bg-transparent">
+                        <div class="container">
+                            <div class="row">
+                                <div class="container">
+                                    <div class="profile-all-dt">
+                                        <div class="profile-name-dt ml-5">
+                                            {% if request.user.profile.image %}
+                                                <img src="{{ request.user.profile.image.url }}" alt="">
+                                            {% else %}
+                                                <img src="{% static 'user/images/default_image.jpg' %}" alt="">
+                                            {% endif %}
+                                            <h1>{{ user.profile.full_name }}</h1>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <!--my-account end-->
+            <div class="col-lg-3 col-md-4 col-12">
+                <div class="left-tab-links">
+                    <div class="nav nav-pills nav-stacked nav-tabs ui vertical menu fluid">
+                        <a href="#my-orders"
+                           data-toggle="tab"
+                           class="item user-tab cursor-pointer active">سفارش‌های من</a>
+                        <a href="#edit-profile"
+                           data-toggle="tab"
+                           class="item user-tab cursor-pointer">اطلاعات کاربری</a>
+                        <!-- <a href="#notifications" data-toggle="tab" class="item user-tab cursor-pointer">اعلانات <span class="n-badge">2</span></a> -->
+                        <a href="#change-password"
+                           data-toggle="tab"
+                           class="item user-tab cursor-pointer">تغییر رمز عبور</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-9 col-md-9 col-12">
+                <div class="tab-content">
+                    <div class="tab-pane active" id="my-orders">
+                        <div class="timeline">
+                            <div class="tab-content-heading">
+                                <h4>سفارش‌های من</h4>
+                            </div>
+                            <div class="my-orders">
+                                <div class="row">
+                                    <div class="col-lg-12 col-md-12 col-12">
+                                        <div class="my-checkout">
+                                            <div class="table-responsive">
+                                                <table class="table  table-bordered">
+                                                    <thead>
+                                                        <tr>
+                                                            <td class="td-heading">نام رستوران</td>
+                                                            <td class="td-heading">قیمت</td>
+                                                            <td class="td-heading"></td>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        {% for order in orders %}
+                                                            <tr>
+                                                                <td>
+                                                                    <div class="checkout-thumb-2"></div>
+                                                                    <div class="name-dt">
+                                                                        <a>
+                                                                            <h4>{{ order.restaurant.name }}</h4>
+                                                                        </a>
+                                                                    </div>
+                                                                </td>
+                                                                <td class="td-content">{{ order.total_price|intcomma }} تومان</td>
+                                                                <td>
+                                                                    <button class="trace-btn btn-link" data-toggle="modal" data-target="#trace">مشاهده فاکتور</button>
+                                                                    <button class="invoice-btn btn-link">
+                                                                        <i class="far fa-file-alt"></i>
+                                                                    </button>
+                                                                    {% if order.status == "temp" %}
+                                                                        <button class="trash-btn btn-link">
+                                                                            <i class="far fa-trash-alt"></i>
+                                                                        </button>
+                                                                    {% endif %}
+                                                                    <div class="modal fade"
+                                                                         tabindex="-1"
+                                                                         id="trace"
+                                                                         role="dialog"
+                                                                         aria-hidden="true">
+                                                                        <div class="modal-dialog modal-xl">
+                                                                            <div class="modal-content">
+                                                                                <div class="trace-model">
+                                                                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                                                                                    <div class="container mb-1">
+                                                                                        <div class="row no-gutters">
+                                                                                            <div class="tab-content-heading">
+                                                                                                <h4 class="m-3">غذا ها</h4>
+                                                                                            </div>
+                                                                                            <div class="col-lg-8 col-md-6 col-12 my-orders">
+                                                                                                <div id="my-checkout-detail" class="my-checkout">
+                                                                                                    <div class="table-responsive">
+                                                                                                        <table id="foods_table" class="table  table-bordered">
+                                                                                                            <thead>
+                                                                                                                <tr>
+                                                                                                                    <td class="td-heading">نام غذا</td>
+                                                                                                                    <td class="td-heading">قیمت</td>
+                                                                                                                    <td class="td-heading">تعداد</td>
+                                                                                                                </tr>
+                                                                                                            </thead>
+                                                                                                            <tbody>
+                                                                                                                <tr>
+                                                                                                                </tr>
+                                                                                                            </tbody>
+                                                                                                        </table>
+                                                                                                    </div>
+                                                                                                    <div id="driver-info" style="margin: 30px 3px 19px;display: none;">
+                                                                                                        <h3>
+                                                                                                            اطلاعات راننده
+                                                                                                        </h1>
+                                                                                                        <div class="driver">
+                                                                                                            <div class="row row-driver">
+                                                                                                                <div class="item-driver">نام و نام خانوادگی:</div>
+                                                                                                                <div id="driver-name" class="item-driver"></div>
+                                                                                                            </div>
+                                                                                                            <div class="row row-driver">
+                                                                                                                <div class="item-driver">شماره تلفن:</div>
+                                                                                                                <div id="driver-phone" class="item-driver"></div>
+                                                                                                            </div>
+                                                                                                        </div>
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                            <div class="col-lg-4 col-md-6 col-12">
+                                                                                                <div class="right-order-dt">
+                                                                                                    <div class="order-no">شماره سفارش : 123</div>
+                                                                                                    <h1></h1>
+                                                                                                    <div class="trace-steps">
+                                                                                                        <ul>
+                                                                                                            <li id="order_confirmed">
+                                                                                                                <div class="steps-names">
+                                                                                                                    سفارش
+                                                                                                                    پذیرفته
+                                                                                                                    شده
+                                                                                                                </div>
+                                                                                                            </li>
+                                                                                                            <li id="order_in_progress">
+                                                                                                                <div class="steps-names">
+                                                                                                                    در حال
+                                                                                                                    آماده
+                                                                                                                    سازی
+                                                                                                                </div>
+                                                                                                            </li>
+                                                                                                            <li id="order_delivery">
+                                                                                                                <div class="steps-names">
+                                                                                                                    تحویل به
+                                                                                                                    پیک
+                                                                                                                </div>
+                                                                                                            </li>
+                                                                                                        </ul>
+                                                                                                    </div>
+                                                                                                    <div class="payment-method-dt">
+                                                                                                        <div class="attr-l">روش پرداخت</div>
+                                                                                                        <div id="order_details_payment_method" class="attr-r">
+                                                                                                            اصفهان کارت
+                                                                                                        </div>
+                                                                                                    </div>
+                                                                                                    <div class="payment-method-dt">
+                                                                                                        <div class="attr-l">
+                                                                                                            کد تخفیف
+                                                                                                        </div>
+                                                                                                        <div id="order_details_coupon" class="attr-r">
+                                                                                                            off50
+                                                                                                        </div>
+                                                                                                    </div>
+                                                                                                    <div class="payment-tol-dt">
+                                                                                                        <div class="attr-l2">
+                                                                                                            جمع کل
+                                                                                                        </div>
+                                                                                                        <div id="order_details_price" class="attr-r2">
+                                                                                                            130,000 تومان
+                                                                                                        </div>
+                                                                                                    </div>
+                                                                                                    <div class="payment-method-dt">
+                                                                                                        <div class="attr-l">
+                                                                                                            روش دریافت
+                                                                                                        </div>
+                                                                                                        <div id="order_details_resive_type" class="attr-r">
+                                                                                                            درب منزل
+                                                                                                        </div>
+                                                                                                    </div>
+                                                                                                    <div class="payment-method-dt">
+                                                                                                        <a href=""
+                                                                                                           id="score-btn"
+                                                                                                           target="_blank"
+                                                                                                           class="item user-tab cursor-pointer active">
+                                                                                                            <div class="attr-l">
+                                                                                                                امتیاز دهید
+                                                                                                            </div>
+                                                                                                        </a>
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </td>
+                                                            </tr>
+                                                        {% endfor %}
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane" id="edit-profile">
+                        <div class="timeline">
+                            <div class="tab-content-heading">
+                                <h4>
+                                    اطلاعات کاربری
+                                </h4>
+                            </div>
+                            <div class="edit-profile">
+                                <h6>
+                                    اطلاعات شما
+                                </h6>
+                                <form class="mt-4">
+                                    <div class="form-group">
+                                        <input type="text"
+                                               class="video-form"
+                                               id="nameUser"
+                                               value="{{ user.profile.full_name }}">
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="field-input">
+                                            <input type="email"
+                                                   class="video-form"
+                                                   id="locationUser"
+                                                   value="{{ user.profile.phone }}">
+                                            <i class="fas fa-mobile-alt"></i>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <input type="text"
+                                               class="video-form"
+                                               id="emailAddress"
+                                               value="{{ user.email }}">
+                                    </div>
+                                    <div class="form-group">
+                                        <input type="text" class="video-form" id="" value="{{ user.profile.address }}">
+                                    </div>
+                                    <button type="submit" class="change-btn btn-link">
+                                        ثبت تغییرات
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane" id="change-password">
+                        <div class="timeline">
+                            <div class="tab-content-heading">
+                                <h4>
+                                    تغییر رمز عبور
+                                </h4>
+                            </div>
+                            <div class="edit-profile">
+                                <form>
+                                    <div class="form-group">
+                                        <label for="OldPassword">
+                                            رمز عبور فعلی *
+                                        </label>
+                                        <input type="password" class="video-form" id="OldPassword">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="newPassword">
+                                            رمز عبور جدید *
+                                        </label>
+                                        <input type="password" class="video-form" id="newPassword">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="confirmPassword">
+                                            تکرار رمز عبور جدید *
+                                        </label>
+                                        <input type="password" class="video-form" id="confirmPassword">
+                                    </div>
+                                    <button type="submit" class="change-btn btn-link">
+                                        ثبت تغییرات
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock content %}
