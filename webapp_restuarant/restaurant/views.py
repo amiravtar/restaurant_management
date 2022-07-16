@@ -1,6 +1,6 @@
 import json
 from django.http import Http404, JsonResponse
-from django.shortcuts import render
+from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
 from django.views import View
 from django.views.generic import ListView
@@ -26,8 +26,45 @@ class Checkout(View):
     def get(self, request):
         order = get_session_order(request)
         if not order:
-            return Http404
+            return redirect("restaurant:Index")
         return render(request, self.template_name, context={"order": order})
+
+    def post(self, request):
+        if "resive_type" in request.POST and "order_address" in request.POST:
+            order = get_session_order(request)
+            if not order:
+                return JsonResponse(
+                    {
+                        "response": "error",
+                        "redirect": reverse_lazy("restaurant:Index"),
+                        "error": "زمان تایید سفارش شما به اتمام رسیده",
+                    }
+                )
+            else:
+                order.address = request.POST["order_address"]
+                order.resive_type = (
+                    Order.TAKEOUT
+                    if request.POST["resive_type"] == "takeout"
+                    else Order.DELIVER
+                )
+                order.status = Order.PENDING_CONFIRM
+                order.save()
+                return JsonResponse(
+                    {
+                        "response": "success",
+                        "redirect": reverse_lazy(
+                            "order:Status", kwargs={"pk": order.pk}
+                        ),
+                    }
+                )
+        else:
+            return JsonResponse(
+                {
+                    "response": "error",
+                    "redirect": reverse_lazy("restaurant:Checkout"),
+                    "error": "لطفا آدرس و نحوه دریافت را مشخص کنید",
+                }
+            )
 
 
 class List(LoginRequiredMixin, ListView):
@@ -48,7 +85,6 @@ class Menu(LoginRequiredMixin, View):
             ),
             restaurant=restaurant,
         )
-        logger.info(date_orders)
         return date_orders
 
     def foods_from_order_date(self, order_date):
@@ -108,7 +144,7 @@ class Menu(LoginRequiredMixin, View):
     def get(self, request, pk):
         restaurant = get_object_or_404(Restaurant, pk=pk)
         order_dates = self.get_order_dates(restaurant)
-        order = get_session_order(request)
+        # order = get_session_order(request)
         context = {"restaurant": restaurant, "order_dates": order_dates}
         # context["order"] = order if order else None
         return render(

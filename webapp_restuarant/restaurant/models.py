@@ -26,7 +26,7 @@ class Restaurant(models.Model):
     )
     address = models.CharField(max_length=80)
     phone = models.CharField(max_length=12)
-    deliver_fee = models.IntegerField(null=True, blank=True)
+    deliver_fee = models.IntegerField(null=True, blank=True, default=0)
     is_delivery_available = models.BooleanField(default=False)
     is_open = models.BooleanField(default=False)
     open_hour = models.TimeField(

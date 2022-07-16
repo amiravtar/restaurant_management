@@ -24,7 +24,7 @@ class OrderAdmin(ModelAdminJalaliMixin, admin.ModelAdmin):
         "restaurant",
         "get_target_date_jalali",
     ]
-    ordering = ["created_on", "target_date"]
+    ordering = ["-created_on", "target_date"]
     actions = [get_order_date]
     date_hierarchy = (
         "created_on"  # Show order by date base of this fields on top of page

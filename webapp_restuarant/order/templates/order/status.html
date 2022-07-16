@@ -1,0 +1,114 @@
+{% extends 'base/base.html' %}
+{% load static %}
+{% block content %}
+    <section class="bill-slip" style="min-height:700px;">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-6 col-md-6 col-12">
+                    <div class="bill-container">
+                        <div class="new-heading">
+                            <h1>از خرید شما متشکریم</h1>
+                        </div>
+                        <div class="discount-text">
+                            <img src="{% static '/user/images/bill/delivery-icon.svg' %}" alt="">
+                        </div>
+                        <div class="slip-detail">
+                            <div class="slip-left">
+                                <p>
+                                    نام و نام ‌خانوادگی
+                                </p>
+                            </div>
+                            <div class="slip-right">
+                                <p>
+                                    {{ order.user.full_name }}
+                                </p>
+                            </div>
+                        </div>
+                        <div class="slip-detail">
+                            <div class="slip-left">
+                                <p>
+                                    سفارش شما از
+                                </p>
+                            </div>
+                            <div class="slip-right">
+                                <p>
+                                    {{ order.restaurant.name }}
+                                </p>
+                            </div>
+                        </div>
+                        <div class="slip-detail">
+                            <div class="slip-left">
+                                <p>
+                                    وعده غذایی
+                                </p>
+                            </div>
+                            <div class="slip-right">
+                                <p>
+                                    چلو کباب لقمه مخصوص
+                                </p>
+                            </div>
+                        </div>
+                        <div class="slip-detail">
+                            <div class="slip-left">
+                                <p>
+                                    تعداد سفارش
+                                </p>
+                            </div>
+                            <div class="slip-right">
+                                <p>
+                                    2
+                                </p>
+                            </div>
+                        </div>
+                        <div class="slip-detail">
+                            <div class="slip-left">
+                                <p>
+                                    مبلغ پرداخت شده
+                                </p>
+                            </div>
+                            <div class="slip-right">
+                                <p>
+                                    42,000تومان
+                                </p>
+                            </div>
+                        </div>
+                        <div class="slip-detail">
+                            <div class="slip-left">
+                                <p>
+                                    نحوه‌ی دریافت
+                                </p>
+                            </div>
+                            <div class="slip-right">
+                                <p>
+                                    دریافت درب منزل
+                                </p>
+                            </div>
+                        </div>
+                        <div class="slip-detail">
+                            <div class="slip-left">
+                                <p>
+                                    نوع پرداخت
+                                </p>
+                            </div>
+                            <div class="slip-right">
+                                <p>
+                                    بانک ملت
+                                </p>
+                            </div>
+                        </div>
+                        <div class="tolal">
+                            <div class="slip-bill-left">
+                                <h5>شماره پیگیری</h5>
+                            </div>
+                            <div class="slip-bill-right">
+                                <p>
+                                    78196352
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock content %}

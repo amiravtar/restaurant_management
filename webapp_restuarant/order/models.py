@@ -14,12 +14,8 @@ class FoodCount(models.Model):
     def __str__(self):
         return "|".join([self.food.name, str(self.count)])
 
-    def total_price(self, order=None):
-        if order:
-            try:
-                return self.food.price * self.count
-            except Exception as e:
-                logger.error(e)
+    @property
+    def total_price(self):
         return self.food.price * self.count
 
 
@@ -134,7 +130,7 @@ class Order(models.Model):
     @property
     def sum_foods_price(self):
         "Return sum of foods price base count except cost of delivery"
-        return sum(item.food.price * item.count for item in self.foods.all())
+        return sum(food.total_price for food in self.foods.all())
 
     @property
     def food_counts(self):
