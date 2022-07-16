@@ -151,3 +151,11 @@ class Order(models.Model):
     def show_status_name(self):
         status_choices_dict = dict(self.ORDER_STATUS)
         return status_choices_dict[self.status]
+
+    @property
+    def get_created_date(self):
+        return date_fromgregorian(self.created_on).strftime("%Y/%M/%d %H:%M")
+
+    @property
+    def get_target_date(self):
+        return date_fromgregorian(self.target_date).strftime("%Y/%M/%d")

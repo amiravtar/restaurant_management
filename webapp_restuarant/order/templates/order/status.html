@@ -1,5 +1,6 @@
 {% extends 'base/base.html' %}
 {% load static %}
+{% load humanize %}
 {% block content %}
     <section class="bill-slip" style="min-height:700px;">
         <div class="container">
@@ -39,42 +40,6 @@
                         <div class="slip-detail">
                             <div class="slip-left">
                                 <p>
-                                    وعده غذایی
-                                </p>
-                            </div>
-                            <div class="slip-right">
-                                <p>
-                                    چلو کباب لقمه مخصوص
-                                </p>
-                            </div>
-                        </div>
-                        <div class="slip-detail">
-                            <div class="slip-left">
-                                <p>
-                                    تعداد سفارش
-                                </p>
-                            </div>
-                            <div class="slip-right">
-                                <p>
-                                    2
-                                </p>
-                            </div>
-                        </div>
-                        <div class="slip-detail">
-                            <div class="slip-left">
-                                <p>
-                                    مبلغ پرداخت شده
-                                </p>
-                            </div>
-                            <div class="slip-right">
-                                <p>
-                                    42,000تومان
-                                </p>
-                            </div>
-                        </div>
-                        <div class="slip-detail">
-                            <div class="slip-left">
-                                <p>
                                     نحوه‌ی دریافت
                                 </p>
                             </div>
@@ -87,12 +52,53 @@
                         <div class="slip-detail">
                             <div class="slip-left">
                                 <p>
-                                    نوع پرداخت
+                                    تاریخ ثبت سفارش
+                                </p>
+                            </div>
+                            <div class="slip-right">
+                                <p style="direction: ltr;">
+                                    {{ order.get_created_date }}
+                                </p>
+                            </div>
+                        </div>
+                        <div class="slip-detail">
+                            <div class="slip-left">
+                                <p>
+                                    تاریخ تحویل
+                                </p>
+                            </div>
+                            <div class="slip-right">
+                                <p style="direction: ltr;">
+                                    {{ order.get_target_date }}
+                                </p>
+                            </div>
+                        </div>
+                        <p>
+                            غذاها
+                        </p>
+                        {% for food in order.foods.all %}
+                            <div class="slip-detail">
+                                <div class="slip-left">
+                                    <p style="direction:ltr;">
+                                        {{ food.food.name }}
+                                    </p>
+                                </div>
+                                <div class="slip-right">
+                                    <p style="direction:ltr;">
+                                        {{ food.food.price|intcomma }} تومان x {{ food.count }}
+                                    </p>
+                                </div>
+                            </div>
+                        {% endfor %}
+                        <div class="slip-detail">
+                            <div class="slip-left">
+                                <p>
+                                    مبلغ پرداخت شده
                                 </p>
                             </div>
                             <div class="slip-right">
                                 <p>
-                                    بانک ملت
+                                    {{ order.total_price|intcomma }} تومان
                                 </p>
                             </div>
                         </div>
@@ -102,7 +108,7 @@
                             </div>
                             <div class="slip-bill-right">
                                 <p>
-                                    78196352
+                                    {{ order.id }}
                                 </p>
                             </div>
                         </div>

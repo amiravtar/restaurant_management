@@ -5142,10 +5142,11 @@ i.icon-delivery-bike {
     border:1px dashed #000;
     background:#fff;
     float: right;
+    min-width: 100%;
 }
 .bill-container p {
     font-size: 18px;
-    color: rgb(227, 136, 2);
+    color: #1E6F5C;
     line-height: 1.333;
     z-index: 122;
     padding-top: 10px;
@@ -5167,7 +5168,9 @@ i.icon-delivery-bike {
 .slip-detail {
     width:100%;
     float: right;
-    margin-bottom:10px;
+    margin-bottom:20px;
+    border-bottom: 0.082rem solid;
+    padding: 5px 0px;
 }
 .slip-left p {
     float: right;
