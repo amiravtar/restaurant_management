@@ -140,8 +140,15 @@ class Order(models.Model):
     # calculate total orders price no tax
     @property
     def total_price(self):
-        delivery = self.restaurant.deliver_fee
-        return delivery + self.sum_foods_price
+        return self.get_delivery_fee + self.sum_foods_price
+        # TODO:Add tax
+
+    @property
+    def get_delivery_fee(self):
+        delivery = 0
+        if self.receive_type == self.DELIVER:
+            delivery = self.restaurant.deliver_fee
+        return delivery
         # TODO:Add tax
 
     def show_receive_type(self):
@@ -159,3 +166,7 @@ class Order(models.Model):
     @property
     def get_target_date(self):
         return date_fromgregorian(self.target_date).strftime("%Y/%M/%d")
+
+    @property
+    def is_deletable(self):
+        return self.status in [self.TEMP, self.PENDING_CONFIRM]

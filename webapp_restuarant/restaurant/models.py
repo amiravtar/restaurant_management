@@ -80,6 +80,5 @@ class Driver(models.Model):
         return self.user.get_full_name()
 
     def __str__(self):
-        return " | ".join([self.FullName, self.restaurant.name])
+        return " | ".join([self.full_name, self.restaurant.name])
 
-    # TODO:asdasd

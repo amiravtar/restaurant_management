@@ -5,8 +5,9 @@ from django.contrib.auth.models import User as djang_user
 
 
 def user_directory_path(instance, filename):
-    "Generate user image path"
+    "Generate profile image path"
     # file will be uploaded to MEDIA_ROOT/user_<id>/<profile.format>
+    print(filename.split("."))
     return "users/{0}/profile.{1}".format(instance.id, filename.split(".")[-1])
 
 

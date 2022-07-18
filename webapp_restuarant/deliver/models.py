@@ -28,7 +28,7 @@ class Deliver(models.Model):
 
     def __str__(self):
         return " | ".join(
-            [self.status, self.driver.FullName, self.order.user.full_name]
+            [self.get_status(), self.driver.full_name, self.order.user.full_name]
         )
 
     @property
