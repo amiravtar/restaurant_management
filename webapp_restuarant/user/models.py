@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User as djang_user
+from django.urls import reverse_lazy
 
 # Create your models here.
 
@@ -60,3 +61,25 @@ class Profile(models.Model):
     @property
     def full_name(self) -> str:
         return self.user.get_full_name()
+
+    @property
+    def is_special_type(self):
+        return self.user_type in [
+            Profile.ADMIN,
+            Profile.ADMIN_RESTAURANT,
+            Profile.DRIVER,
+        ]
+
+    @property
+    def get_special_url(self):
+        if self.user_type in [Profile.ADMIN, Profile.ADMIN_RESTAURANT]:
+            return reverse_lazy("admin:index")
+        elif self.user_type == Profile.DRIVER:
+            return reverse_lazy("deliver:Index")
+
+    @property
+    def get_special_string(self):
+        if self.user_type in [Profile.ADMIN, Profile.ADMIN_RESTAURANT]:
+            return "پنل مدیر"
+        elif self.user_type == Profile.DRIVER:
+            return "پنل پیک"

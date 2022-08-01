@@ -16,6 +16,10 @@ def get_order_date(modeladmin, request, queryset):
             logger.warning("Coudnt get order_date for order {0}".format(obj.id))
 
 
+class OrderDateAdmin(ModelAdminJalaliMixin, admin.ModelAdmin):
+    pass
+
+
 class OrderAdmin(ModelAdminJalaliMixin, admin.ModelAdmin):
     list_display = [
         "get_created_jalali",
@@ -42,5 +46,5 @@ class OrderAdmin(ModelAdminJalaliMixin, admin.ModelAdmin):
 
 admin.site.register(Order, OrderAdmin)
 admin.site.register(FoodCount)
-admin.site.register(OrderDate)
+admin.site.register(OrderDate, OrderDateAdmin)
 admin.site.register(DateFoodCount)

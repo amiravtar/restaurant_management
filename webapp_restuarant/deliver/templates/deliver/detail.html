@@ -1,0 +1,74 @@
+{% extends 'base/base.html' %}
+{% load static %}
+{% block content %}
+    {% csrf_token %}
+    <section class="bill-slip">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-6 col-md-6 col-12">
+                    {% include 'order/order_bil.html' %}
+                    <div class="m-2 float-right">
+                        <div class="hide" id="textInput">
+                            <input class="video-form m-2"
+                                   type="text"
+                                   placeholder="توضیحات را اینجا وارد کنید"
+                                   id="txt_description"/>
+                        </div>
+                        <div class="m-2">
+                            <a href="tel:{{ order.user.profile.phone }}" class="btn btn-info">تماس با تحویل گیرنده</a>
+                            <button class="btn btn-primary"
+                                    data-toggle="modal"
+                                    data-id="deliverd"
+                                    data-target="#trace"
+                                    onclick="onButtonClick2(this);">
+                                تحویل داده شد
+                            </button>
+                            <input class="btn btn-danger"
+                                   type="button"
+                                   name="answer"
+                                   value="تحویل داده نشد"
+                                   onclick="onButtonClick2(this);"/>
+                        </div>
+                        <div class="hide" id="callb">
+                            <div class="slip-bill-left">
+                                <h5>ضمن ثبت توضیحات لطفا هم اکنون موضوع را با رستوران در میان بگذارید</h5>
+                                <p>
+                                    {{ order.restaurant.phone }}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <script>
+        function onButtonClick2(sender) {
+            let data={};
+            data["description"]=$("#txt_description").val();
+            if ($(sender).data("id")!="deliverd"){
+                data["action"]="ndeliver"ForeignKey;
+            }
+            else{
+                data["action"]="delivered";
+            }
+            const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+            $.ajax({
+                headers: {
+                    'X-CSRFToken': csrftoken
+                },
+                type: "POST",
+                url: "{% url 'deliver:Detail' deliver.id %}",
+                data: data,
+                dataType: "json",
+                success: function (response) {
+                    if (response["response"] == "success") {
+                        window.location.href = response["redirect"];
+                    } else {
+                        toastr.error(response["error"], '', { timeOut: 5000 });
+                    }
+                }
+            });
+        }
+    </script>
+{% endblock content %}

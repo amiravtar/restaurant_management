@@ -1,5 +1,8 @@
 from django.db import models
+from django.db.models.signals import pre_delete, m2m_changed
+from django.dispatch import receiver
 from utils.date_persian import date_fromgregorian
+from django.core.exceptions import ValidationError
 import logging
 
 # Create your models here.
@@ -41,12 +44,35 @@ class OrderDate(models.Model):
 
     """
 
-    date = models.DateField(auto_now=False, auto_now_add=False, unique=True)
-    foods = models.ManyToManyField(DateFoodCount, blank=True)
-    restaurant = models.ForeignKey("restaurant.Restaurant", on_delete=models.CASCADE)
+    date = models.DateField(
+        auto_now=False, auto_now_add=False, unique=True, verbose_name="تاریخ"
+    )
+    foods = models.ManyToManyField(
+        DateFoodCount, blank=True, related_name="order_date", verbose_name="غذاها"
+    )
+    restaurant = models.ForeignKey(
+        "restaurant.Restaurant", on_delete=models.CASCADE, verbose_name="رستوران مربوطه"
+    )
 
     def __str__(self):
         return date_fromgregorian(self.date).strftime("%Y/%m/%d %b %a")
+
+
+@receiver(pre_delete, sender=OrderDate)
+def order_date_pre_delete(sender, instance, **kwargs):
+    for i in instance.foods.all():
+        i.delete()
+
+
+@receiver(m2m_changed, sender=OrderDate.foods.through)
+def order_date_post_save(sender, instance, action, **kwargs):
+    if action == "post_add":
+        for i in instance.foods.all():
+            if i.order_date.count() > 1:
+                dfc = DateFoodCount(food=i.food, count=i.count)
+                dfc.save()
+                instance.foods.remove(i)
+                instance.foods.add(dfc)
 
 
 class Order(models.Model):
@@ -64,7 +90,6 @@ class Order(models.Model):
     DELIVERY = "delivery"
     DELIVERED = "delivered"
     FAILED = "failed"
-    WATING_FOR_PAY = "wating_for_pay"
     NOT_CONFIRM = "not_confirmed"
 
     ORDER_STATUS = [
@@ -73,9 +98,8 @@ class Order(models.Model):
         (CONFIRMED, "سفارش پذیرفته شده"),
         (IN_PROGRESS, "در حال آماده سازی"),
         (DELIVERY, "تحویل به پیک"),
-        (DELIVERED, "تحویل به مشتری"),
-        (FAILED, "پذیرفته نشده"),
-        (WATING_FOR_PAY, "منتظر پرداخت"),
+        (DELIVERED, "تحویل داده شده به مشتری"),
+        (FAILED, "به مشکل برخورده"),
         (NOT_CONFIRM, "تایید نشده"),
     ]
 
@@ -161,12 +185,18 @@ class Order(models.Model):
 
     @property
     def get_created_date(self):
-        return date_fromgregorian(self.created_on).strftime("%Y/%M/%d %H:%M")
+        return date_fromgregorian(self.created_on).strftime("%Y/%m/%d %H:%M")
 
     @property
     def get_target_date(self):
-        return date_fromgregorian(self.target_date).strftime("%Y/%M/%d")
+        return date_fromgregorian(self.target_date).strftime("%Y/%m/%d")
 
     @property
     def is_deletable(self):
         return self.status in [self.TEMP, self.PENDING_CONFIRM]
+    
+    @property
+    def is_delivery(self):
+        return self.receive_type ==Order.DELIVER
+    
+

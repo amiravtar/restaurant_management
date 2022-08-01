@@ -81,4 +81,3 @@ class Driver(models.Model):
 
     def __str__(self):
         return " | ".join([self.full_name, self.restaurant.name])
-

@@ -1,120 +1,13 @@
 {% extends 'base/base.html' %}
 {% load static %}
-{% load humanize %}
 {% block content %}
-    <section class="bill-slip" style="min-height:700px;">
-        <div class="container">
-            <div class="row justify-content-center">
-                <div class="col-lg-6 col-md-6 col-12">
-                    <div class="bill-container">
-                        <div class="new-heading">
-                            <h1>از خرید شما متشکریم</h1>
-                        </div>
-                        <div class="discount-text">
-                            <img src="{% static '/user/images/bill/delivery-icon.svg' %}" alt="">
-                        </div>
-                        <div class="slip-detail">
-                            <div class="slip-left">
-                                <p>
-                                    نام و نام ‌خانوادگی
-                                </p>
-                            </div>
-                            <div class="slip-right">
-                                <p>
-                                    {{ order.user.full_name }}
-                                </p>
-                            </div>
-                        </div>
-                        <div class="slip-detail">
-                            <div class="slip-left">
-                                <p>
-                                    سفارش شما از
-                                </p>
-                            </div>
-                            <div class="slip-right">
-                                <p>
-                                    {{ order.restaurant.name }}
-                                </p>
-                            </div>
-                        </div>
-                        <div class="slip-detail">
-                            <div class="slip-left">
-                                <p>
-                                    نحوه‌ی دریافت
-                                </p>
-                            </div>
-                            <div class="slip-right">
-                                <p>
-                                    دریافت درب منزل
-                                </p>
-                            </div>
-                        </div>
-                        <div class="slip-detail">
-                            <div class="slip-left">
-                                <p>
-                                    تاریخ ثبت سفارش
-                                </p>
-                            </div>
-                            <div class="slip-right">
-                                <p style="direction: ltr;">
-                                    {{ order.get_created_date }}
-                                </p>
-                            </div>
-                        </div>
-                        <div class="slip-detail">
-                            <div class="slip-left">
-                                <p>
-                                    تاریخ تحویل
-                                </p>
-                            </div>
-                            <div class="slip-right">
-                                <p style="direction: ltr;">
-                                    {{ order.get_target_date }}
-                                </p>
-                            </div>
-                        </div>
-                        <p>
-                            غذاها
-                        </p>
-                        {% for food in order.foods.all %}
-                            <div class="slip-detail">
-                                <div class="slip-left">
-                                    <p style="direction:ltr;">
-                                        {{ food.food.name }}
-                                    </p>
-                                </div>
-                                <div class="slip-right">
-                                    <p style="direction:ltr;">
-                                        {{ food.food.price|intcomma }} تومان x {{ food.count }}
-                                    </p>
-                                </div>
-                            </div>
-                        {% endfor %}
-                        <div class="slip-detail">
-                            <div class="slip-left">
-                                <p>
-                                    مبلغ پرداخت شده
-                                </p>
-                            </div>
-                            <div class="slip-right">
-                                <p>
-                                    {{ order.total_price|intcomma }} تومان
-                                </p>
-                            </div>
-                        </div>
-                        <div class="tolal">
-                            <div class="slip-bill-left">
-                                <h5>شماره پیگیری</h5>
-                            </div>
-                            <div class="slip-bill-right">
-                                <p>
-                                    {{ order.id }}
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+<section class="bill-slip" style="min-height:700px;">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-6 col-md-6 col-12">
+                {% include 'order/order_bil.html' %}
             </div>
         </div>
-    </section>
+    </div>
+</section>
 {% endblock content %}

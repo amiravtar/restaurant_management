@@ -1,0 +1,41 @@
+{% extends 'base/base.html' %}
+{% load static %}
+{% block content %}
+    <!--title-bar start-->
+    <section class="title-bar text-center">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="left-title-text">
+                        <h3>پنل پیک</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!--title-bar end-->
+    <!--bill-slip start-->
+    {% for deliver in delivers %}
+        <section class="bill-slip">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-lg-6 col-md-6 col-12">
+                        <div class="card text-center mmaman">
+                            <div class="card-header">{{ deliver.order.id }}</div>
+                            <div class="card-body">
+                                <h5 class="card-title">{{ deliver.order.user.full_name }}</h5>
+                                <p class="card-text">
+                                    {{ deliver.order.address }}
+                                </p>
+                                <a href="tel:{{ deliver.order.user.profile.phone }}"
+                                   class="btn btn-info">تماس با تحویل گیرنده</a>
+                                <a href="{% url 'deliver:Detail' deliver.id %}" class="btn btn-primary">مشاهده</a>
+                            </div>
+                            <div class="card-footer text-muted">{{ deliver.get_time_diffrence }} دقیقه پیش</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    {% endfor %}
+{% endblock content %}
