@@ -24,6 +24,21 @@ class FoodCount(models.Model):
         return self.food.price * self.count
 
 
+class FixMenu(models.Model):
+    class Meta:
+        verbose_name = "منوی ثابت"
+        verbose_name_plural = "منو های ثابت"
+
+    name = models.CharField("نام منو", max_length=50)
+    restaurant = models.ForeignKey(
+        "restaurant.Restaurant", verbose_name="رستوران", on_delete=models.CASCADE
+    )
+    foods = models.ManyToManyField("food.Food", verbose_name="غذا ها")
+
+    def __str__(self):
+        return " | ".join([self.name, str([f.name for f in self.foods.all()])])
+
+
 class DateFoodCount(models.Model):
     """_summary_
 
@@ -54,6 +69,10 @@ class OrderDate(models.Model):
 
     """
 
+    class Meta:
+        verbose_name = "منوی تاریخ دار"
+        verbose_name_plural = "منو های تاریخ دار"
+
     date = models.DateField(
         auto_now=False, auto_now_add=False, unique=True, verbose_name="تاریخ"
     )
@@ -63,6 +82,14 @@ class OrderDate(models.Model):
     restaurant = models.ForeignKey(
         "restaurant.Restaurant", on_delete=models.CASCADE, verbose_name="رستوران مربوطه"
     )
+    fix_menu = models.ForeignKey(
+        FixMenu,
+        verbose_name="منوی ثابت",
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True,
+    )
+    disable = models.BooleanField(verbose_name="غیر فعال", default=False)
 
     def __str__(self):
         return date_fromgregorian(self.date).strftime("%Y/%m/%d %b %a")
@@ -83,6 +110,10 @@ def order_date_pre_delete(sender, instance, **kwargs):
 def order_date_post_save(sender, instance, action, **kwargs):
     if action == "post_add":
         for i in instance.foods.all():
+            if instance.fix_menu:
+                if i in instance.fix_menu:
+                    instance.foods.remove(i)
+                    continue
             if i.order_date.count() > 1:
                 dfc = DateFoodCount(food=i.food, count=i.count)
                 dfc.save()
@@ -172,6 +203,16 @@ class Order(models.Model):
         return sum(food.total_price for food in self.foods.all())
 
     @property
+    def total_foods_price(self):
+        sumf = self.sum_foods_price
+        return sumf + int(sumf * self.restaurant.tax_food / 100)
+
+    @property
+    def food_tax(self):
+        sumf = self.sum_foods_price
+        return int(sumf * self.restaurant.tax_food / 100)
+
+    @property
     def food_counts(self):
         "return counts of food's order"
         return sum(item.count for item in self.foods.all())
@@ -179,8 +220,9 @@ class Order(models.Model):
     # calculate total orders price no tax
     @property
     def total_price(self):
-        return self.get_delivery_fee + self.sum_foods_price
-        # TODO:Add tax
+        return int(
+            self.total_delivery_fee + self.total_foods_price + self.restaurant.tax_fix
+        )
 
     @property
     def get_delivery_fee(self):
@@ -188,7 +230,20 @@ class Order(models.Model):
         if self.receive_type == self.DELIVER:
             delivery = self.restaurant.deliver_fee
         return delivery
-        # TODO:Add tax
+
+    @property
+    def total_delivery_fee(self):
+        fee = self.get_delivery_fee
+        return fee + int(fee * self.restaurant.tax_delivery / 100)
+
+    @property
+    def delivery_tax(self):
+        fee = self.get_delivery_fee
+        return int(fee * self.restaurant.tax_delivery / 100)
+
+    @property
+    def fix_tax(self):
+        return self.restaurant.tax_fix
 
     def show_receive_type(self):
         status_dict = dict(self.RECEIVE_TYPE)
@@ -197,6 +252,7 @@ class Order(models.Model):
     def show_status_name(self):
         status_choices_dict = dict(self.ORDER_STATUS)
         return status_choices_dict[self.status]
+
     @property
     def show_deliver_status_name(self):
         status_choices_dict = dict(Deliver.STATUS_TYPE)
@@ -217,6 +273,10 @@ class Order(models.Model):
     @property
     def is_delivery(self):
         return self.deliver.exists()
+
+    @property
+    def is_takeout(self):
+        return self.receive_type == self.TAKEOUT
 
     @property
     def get_deliver_drive_name(self):
@@ -246,11 +306,14 @@ def order_pre_delete(sender, instance, **kwargs):
         if df.exists():
             df = df[0]
         else:
-            logger.error(
-                "DateFoodCount with food {0} Dosent exist for this order {1}".format(
-                    fc.food, instance.id
+            if order_date.fix_menu and order_date.fix_menu.foods.contains(fc.food):
+                continue
+            else:
+                logger.error(
+                    "DateFoodCount with food {0} Dosent exist for this order {1}".format(
+                        fc.food, instance.id
+                    )
                 )
-            )
             raise ValidationError("غذای مورد نظر پیدا نشد")
         df.count = df.count + fc.count
         df.save()

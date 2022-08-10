@@ -60,16 +60,8 @@
                                   placeholder="تاریخ"
                                   onchange="send_date();">
                             {% for date in order_dates.all %}
-                              {% comment %} {% if order %}
-                                {% if order.order_date == date %}
-                                  <option value="{{ date.id }}" selected>
-                                  {% else %}
-                                    <option value="{{ date.id }}">
-                                    {% endif %} {% endcomment %}
-                                  {% comment %} {% else %} {% endcomment %}
-                                    <option value="{{ date.id }}">
-                                    {% comment %} {% endif %} {% endcomment %}
-                                    {{ date }}
+                                    <option value="{{ date.id }}" {% if date.disable %}disabled{% endif %}>
+                                    {{ date }} {% if date.disable %}غیر فعال{% endif %}
                                   </option>
                                 {% endfor %}
                               </select>

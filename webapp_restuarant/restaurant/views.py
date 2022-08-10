@@ -1,4 +1,5 @@
 import json
+from pprint import pprint
 from sre_constants import SUCCESS
 from django.http import Http404, JsonResponse
 from django.shortcuts import redirect, render
@@ -31,41 +32,52 @@ class Checkout(View):
         return render(request, self.template_name, context={"order": order})
 
     def post(self, request):
+        order = get_session_order(request)
+        if not order:
+            return JsonResponse(
+                {
+                    "response": "error",
+                    "redirect": reverse_lazy("restaurant:Index"),
+                    "error": "زمان تایید سفارش شما به اتمام رسیده",
+                }
+            )
         if "resive_type" in request.POST and "order_address" in request.POST:
-            order = get_session_order(request)
-            if not order:
-                return JsonResponse(
-                    {
-                        "response": "error",
-                        "redirect": reverse_lazy("restaurant:Index"),
-                        "error": "زمان تایید سفارش شما به اتمام رسیده",
-                    }
-                )
-            else:
-                order.address = request.POST["order_address"]
-                order.resive_type = (
+            order.address = request.POST["order_address"]
+            order.resive_type = (
+                Order.TAKEOUT
+                if request.POST["resive_type"] == "takeout"
+                else Order.DELIVER
+            )
+            order.status = Order.PENDING_CONFIRM
+            order.save()
+            self.request.user.profile.clear_temp()
+            return JsonResponse(
+                {
+                    "response": "success",
+                    "redirect": reverse_lazy("order:Status", kwargs={"pk": order.pk}),
+                }
+            )
+        else:
+            if "resive_type_change" in request.POST:
+                order.receive_type = (
                     Order.TAKEOUT
                     if request.POST["resive_type"] == "takeout"
                     else Order.DELIVER
                 )
-                order.status = Order.PENDING_CONFIRM
                 order.save()
                 return JsonResponse(
                     {
                         "response": "success",
-                        "redirect": reverse_lazy(
-                            "order:Status", kwargs={"pk": order.pk}
-                        ),
                     }
                 )
-        else:
-            return JsonResponse(
-                {
-                    "response": "error",
-                    "redirect": reverse_lazy("restaurant:Checkout"),
-                    "error": "لطفا آدرس و نحوه دریافت را مشخص کنید",
-                }
-            )
+            else:
+                return JsonResponse(
+                    {
+                        "response": "error",
+                        "redirect": reverse_lazy("restaurant:Checkout"),
+                        "error": "لطفا آدرس و نحوه دریافت را مشخص کنید",
+                    }
+                )
 
 
 class List(LoginRequiredMixin, ListView):
@@ -82,7 +94,8 @@ class Menu(LoginRequiredMixin, View):
         date_orders = OrderDate.objects.filter(
             date__range=(
                 py_datetime.date.today(),
-                py_datetime.timedelta(days=7) + py_datetime.date.today(),
+                py_datetime.timedelta(days=restaurant.max_reserve_time)
+                + py_datetime.date.today(),
             ),
             restaurant=restaurant,
         )
@@ -105,6 +118,22 @@ class Menu(LoginRequiredMixin, View):
                     },
                 }
             )
+        if order_date.fix_menu:
+            for i in order_date.fix_menu.foods.all():
+                data.setdefault(
+                    i.category.id, {"cate_name": i.category.name, "foods": []}
+                )["foods"].append(
+                    {
+                        "count": 999,
+                        "food": {
+                            "id": i.id,
+                            "name": i.name,
+                            "price": i.price,
+                            "des": i.description,
+                            "image": i.image.url if i.image else None,
+                        },
+                    }
+                )
         return data
 
     def check_foods_with_order_date(self, order_date: OrderDate, data: dict):
@@ -126,21 +155,31 @@ class Menu(LoginRequiredMixin, View):
             food = food[0]
             fc = order_date.foods.filter(food=food)
             if not fc.exists():
-                messages.error(self.request, "غذای مورد نظر برای این روز وجود ندارد")
-                return None
-            fc = fc[0]
-            if data["foods"][i]["count"] > fc.count:
-                messages.error(
-                    self.request,
-                    "تعداد سفارش برای غذای {0} بیشتر از مقدار مجاز است".format(
-                        food.name
-                    ),
-                )
-                return None
+                if order_date.fix_menu and order_date.fix_menu.foods.contains(food):
+                    fc = food
+                else:
+                    messages.error(
+                        self.request, "غذای مورد نظر برای این روز وجود ندارد"
+                    )
+                    return None
+            if not type(fc) == Food:
+                fc = fc[0]
+                if data["foods"][i]["count"] > fc.count:
+                    messages.error(
+                        self.request,
+                        "تعداد سفارش برای غذای {0} بیشتر از مقدار مجاز است".format(
+                            food.name
+                        ),
+                    )
+                    return None
             order_food_count = get_or_create_order_food(food, data["foods"][i]["count"])
             order.foods.add(order_food_count)
         order.save()
-        self.request.session["order_data"] = order.id
+        profile = self.request.user.profile
+        if profile.temp_order:
+            profile.temp_order.delete()
+        profile.temp_order = order
+        profile.save()
         return order
 
     def reduce_date_order_food(self, order: Order):
@@ -153,12 +192,15 @@ class Menu(LoginRequiredMixin, View):
             if df.exists():
                 df = df[0]
             else:
-                logger.error(
-                    "DateFoodCount with food {0} Dosent exist for this order {1}".format(
-                        fc.food, order.id
+                if order_date.fix_menu and order_date.fix_menu.foods.contains(fc.food):
+                    continue
+                else:
+                    logger.error(
+                        "DateFoodCount with food {0} Dosent exist for this order {1}".format(
+                            fc.food, order.id
+                        )
                     )
-                )
-                raise ValidationError("غذای مورد نظر پیدا نشد")
+                    raise ValidationError("غذای مورد نظر پیدا نشد")
             df.count = df.count - fc.count
             df.save()
 

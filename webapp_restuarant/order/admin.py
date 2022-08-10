@@ -1,5 +1,7 @@
 from django.contrib import admin
-from order.models import FoodCount, Order, OrderDate, DateFoodCount
+from order.models import FoodCount, Order, OrderDate, DateFoodCount, FixMenu
+from food.models import Food
+from restaurant.models import Restaurant
 from jalali_date.admin import ModelAdminJalaliMixin
 from jalali_date import datetime2jalali, date2jalali
 from utils.date_persian import date_fromgregorian
@@ -41,6 +43,45 @@ class OrderDateAdmin(ModelAdminJalaliMixin, admin.ModelAdmin):
     inlines = [OrderDateFoodsInline]
     exclude = ["foods"]
 
+    def formfield_for_foreignkey(self, db_field, request, **kwargs):
+        if db_field.name == "fix_menu":
+            try:
+                obj_id = request.resolver_match.kwargs["object_id"]
+                kwargs["queryset"] = FixMenu.objects.filter(
+                    restaurant__id=OrderDate.objects.get(id=obj_id).restaurant
+                )
+                print(request.resolver_match.kwargs["object_id"])
+            except Exception as e:
+                logger.info(e)
+                kwargs["queryset"] = FixMenu.objects.filter(
+                    restaurant__admin=request.user
+                )
+        return super().formfield_for_foreignkey(db_field, request, **kwargs)
+
+
+class FixMenuFoodsInline(admin.TabularInline):
+    model = FixMenu.foods.through
+    extra = 0
+
+    def formfield_for_foreignkey(self, db_field, request, **kwargs):
+        if db_field.name == "food":
+            if not request.user.is_superuser:
+                kwargs["queryset"] = Food.objects.filter(restaurant__admin=request.user)
+            return super().formfield_for_foreignkey(
+                db_field=db_field, request=request, **kwargs
+            )
+
+
+class FixMenuAdmin(admin.ModelAdmin):
+    inlines = [FixMenuFoodsInline]
+    exclude = ["foods"]
+
+    def formfield_for_foreignkey(self, db_field, request, **kwargs):
+        if db_field.name == "restaurant":
+            if not request.user.is_superuser:
+                kwargs["queryset"] = Restaurant.objects.filter(admin=request.user)
+        return super().formfield_for_foreignkey(db_field, request, **kwargs)
+
 
 class OrderAdmin(ModelAdminJalaliMixin, admin.ModelAdmin):
     list_display = [
@@ -66,7 +107,16 @@ class OrderAdmin(ModelAdminJalaliMixin, admin.ModelAdmin):
         return date_fromgregorian(obj.target_date).strftime("%Y/%m/%d %b %a")
 
 
+class DateFoodCountAdmin(admin.ModelAdmin):
+    def formfield_for_foreignkey(self, db_field, request, **kwargs):
+        if db_field.name == "food":
+            if not request.user.is_superuser:
+                kwargs["queryset"] = Food.objects.filter(restaurant__admin=request.user)
+        return super().formfield_for_foreignkey(db_field, request, **kwargs)
+
+
 admin.site.register(Order, OrderAdmin)
 admin.site.register(FoodCount)
 admin.site.register(OrderDate, OrderDateAdmin)
-admin.site.register(DateFoodCount)
+admin.site.register(DateFoodCount, DateFoodCountAdmin)
+admin.site.register(FixMenu, FixMenuAdmin)

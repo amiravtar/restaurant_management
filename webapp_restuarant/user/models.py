@@ -54,6 +54,13 @@ class Profile(models.Model):
         max_length=None,
     )
     phone = models.CharField(max_length=12, null=True, blank=True)
+    temp_order = models.OneToOneField(
+        "order.Order",
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="temp_user",
+    )
 
     def __str__(self):
         return " | ".join([self.full_name, self.user_type])
@@ -83,3 +90,7 @@ class Profile(models.Model):
             return "پنل مدیر"
         elif self.user_type == Profile.DRIVER:
             return "پنل پیک"
+
+    def clear_temp(self):
+        self.temp_order = None
+        self.save()

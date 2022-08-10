@@ -2,153 +2,219 @@
 {% load static %}
 {% load humanize %}
 {% block content %}
-<section class="title-bar text-center">
-    <div class="container">
-        <div class="row">
-            <div class="col-md-12">
-                <div class="left-title-text">
-                    <h3>تایید نهایی</h3>
+    <section class="title-bar text-center">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="left-title-text">
+                        <h3>تایید نهایی</h3>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-</section>
-<!--title-bar end-->
-<!--partners start-->
-<section class="all-partners mb-7">
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-8 col-md-8">
-                <div class="my-checkout">
-                    <div class="table-responsive">
-                        <table class="table  table-bordered">
-                            <thead>
-                                <tr>
-                                    <td class="td-heading">سفارش شما</td>
-                                    <td class="td-heading">تعداد</td>
-                                    <td class="td-heading">قیمت</td>
-                                    <td class="td-heading">جمع</td>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for food in order.foods.all %}
-                                <tr>
-                                    <td>
-                                        <div class="checkout-thumb">
-                                            <a>
-                                                {% if food.food.image %}
-                                                <img src="{{ food.food.image.url }}" class="img-responsive" alt="thumb"
-                                                    title="thumb" />
-                                                {% else %}
-                                                <img src="{% static 'user/images/default_image.jpg' %}"
-                                                    class="img-responsive" alt="thumb" title="thumb" />
-                                                {% endif %}
-                                            </a>
-                                        </div>
-                                        <div class="m-4">
-                                            <a>
-                                                <h4>{{ food.food.name }}</h4>
-                                            </a>
-                                        </div>
-                                    </td>
-                                    <td class="td-content">{{ food.count }}</td>
-                                    <td class="td-content">{{ food.food.price |intcomma }} تومان</td>
-                                    <td class="td-content">{{ food.total_price |intcomma }} تومان</td>
-                                </tr>
-                                {% endfor %}
-                            </tbody>
-                            <tfoot>
-                                <tr>
-                                    <td class="td-content"></td>
-                                    <td class="td-content">{{ order.food_counts }}</td>
-                                    <td class="td-content"></td>
-                                    <td class="td-content">{{ order.sum_foods_price|intcomma }} تومان</td>
-                                </tr>
-                            </tfoot>
-                        </table>
+    </section>
+    <!--title-bar end-->
+    <!--partners start-->
+    <section class="all-partners mb-7">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-md-8">
+                    <div class="my-checkout">
+                        <div class="table-responsive">
+                            <table class="table  table-bordered">
+                                <thead>
+                                    <tr>
+                                        <td class="td-heading">سفارش شما</td>
+                                        <td class="td-heading">تعداد</td>
+                                        <td class="td-heading">قیمت</td>
+                                        <td class="td-heading">جمع</td>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for food in order.foods.all %}
+                                        <tr>
+                                            <td>
+                                                <div class="checkout-thumb">
+                                                    <a>
+                                                        {% if food.food.image %}
+                                                            <img src="{{ food.food.image.url }}"
+                                                                 class="img-responsive"
+                                                                 alt="thumb"
+                                                                 title="thumb"/>
+                                                        {% else %}
+                                                            <img src="{% static 'user/images/default_image.jpg' %}"
+                                                                 class="img-responsive"
+                                                                 alt="thumb"
+                                                                 title="thumb"/>
+                                                        {% endif %}
+                                                    </a>
+                                                </div>
+                                                <div class="m-4">
+                                                    <a>
+                                                        <h4>{{ food.food.name }}</h4>
+                                                    </a>
+                                                </div>
+                                            </td>
+                                            <td class="td-content">{{ food.count }}</td>
+                                            <td class="td-content">{{ food.food.price |intcomma }} تومان</td>
+                                            <td class="td-content">{{ food.total_price |intcomma }} تومان</td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <td class="td-content"></td>
+                                        <td class="td-content">{{ order.food_counts }}</td>
+                                        <td class="td-content"></td>
+                                        <td class="td-content">{{ order.sum_foods_price|intcomma }} تومان</td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
                     </div>
-                </div>
-                <div class="right-payment-method">
-                    <h4>
-                        <i class="fa fa-credit-card"></i> نحوه‌ی تحویل سفارش را مشخص کنید
-                    </h4>
-                    <div class="single-payment-method">
-                        <div class="payment-method-name">
-                            <div class="custom-control custom-radio pr-0">
-                                <label>
-                                    <input type="radio" name="rdb_resivetype" value="deliver">
-                                    ازسال درب منزل
-                                </label>
+                    <div class="right-payment-method">
+                        <h4>
+                            <i class="fa fa-credit-card"></i> نحوه‌ی تحویل سفارش را مشخص کنید
+                        </h4>
+                        <div class="single-payment-method">
+                            <div class="payment-method-name">
+                                <div class="custom-control custom-radio pr-0">
+                                    <label>
+                                        <input type="radio"
+                                               name="rdb_resivetype"
+                                               value="deliver"
+                                               {% if not order.is_takeout %}checked{% endif %}>
+                                        ازسال درب منزل
+                                    </label>
+                                </div>
+                                <div class="custom-control custom-radio1 pr-0">
+                                    <label>
+                                        <input type="radio"
+                                               name="rdb_resivetype"
+                                               value="takeout"
+                                               {% if order.is_takeout %}checked{% endif %}>
+                                        دریافت حضوری
+                                    </label>
+                                </div>
                             </div>
-                            <div class="custom-control custom-radio1 pr-0">
-                                <label>
-                                    <input type="radio" name="rdb_resivetype" value="takeout" checked>
-                                    دریافت حضوری
-                                </label>
+                        </div>
+                    </div>
+                    <div class="right-contact-dt">
+                        <h4>ثبت آدرس</h4>
+                        <div class="form-group">
+                            <div class="input-field">
+                                <input id="order_address"
+                                       name="order_address"
+                                       type="text"
+                                       class="confirm-form"
+                                       placeholder="آدرس"
+                                       value="{% if order.address %}{{ order.address }}{% else %}{{ order.user.profile.address }}{% endif %}">
+                                <i class="fa fa-map-marker-alt"></i>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="right-contact-dt">
-                    <h4>ثبت آدرس</h4>
-                    <div class="form-group">
-                        <div class="input-field">
-                            <input id="order_address" name="order_address" type="text" class="confirm-form"
-                                placeholder="آدرس"
-                                value="{% if order.address %}{{ order.address }}{% else %}{{ order.user.profile.address }}{% endif %}">
-                            <i class="fa fa-map-marker-alt"></i>
+                <div class="col-lg-4 col-md-4">
+                    <div class="your-order">
+                        <h4>سفارش شما</h4>
+                        <div class="order-d">
+                            <div class="item-dt-left">
+                                <span>جمع سفارش</span>
+                            </div>
+                            <div class="item-dt-right">
+                                <p>
+                                    {{ order.sum_foods_price |intcomma }} تومان
+                                </p>
+                            </div>
+                        </div>
+                        <div class="order-d">
+                            <div class="item-dt-left">
+                                <span>مالیات بر غذا</span>
+                            </div>
+                            <div class="item-dt-right">
+                                <p>
+                                    {{ order.food_tax |intcomma }} تومان
+                                </p>
+                            </div>
+                        </div>
+                        <div class="order-d">
+                            <div class="item-dt-left">
+                                <span>هزینه ارسال</span>
+                            </div>
+                            <div class="item-dt-right">
+                                <p>
+                                    {{ order.get_delivery_fee |intcomma }} تومان
+                                </p>
+                            </div>
+                        </div>
+                        <div class="order-d">
+                            <div class="item-dt-left">
+                                <span>مالیات بر هزینه ارسال</span>
+                            </div>
+                            <div class="item-dt-right">
+                                <p>
+                                    {{ order.delivery_tax |intcomma }} تومان
+                                </p>
+                            </div>
+                        </div>
+                        <div class="order-d">
+                            <div class="item-dt-left">
+                                <span>مالیات ثابت</span>
+                            </div>
+                            <div class="item-dt-right">
+                                <p>
+                                    {{ order.fix_tax |intcomma }} تومان
+                                </p>
+                            </div>
+                        </div>
+                        <div class="total-bill">
+                            <div class="total-bill-text">
+                                <h5>قابل پرداخت</h5>
+                            </div>
+                            <div class="total-bill-payment">
+                                <p>
+                                    {{ order.total_price|intcomma }} تومان
+                                </p>
+                            </div>
                         </div>
                     </div>
-                </div>
-            </div>
-            <div class="col-lg-4 col-md-4">
-                <div class="your-order">
-                    <h4>سفارش شما</h4>
-                    <div class="order-d">
-                        <div class="item-dt-left">
-                            <span>جمع سفارش</span>
-                        </div>
-                        <div class="item-dt-right">
-                            <p>
-                                {{ order.sum_foods_price |intcomma }} تومان
-                            </p>
-                        </div>
+                    <div class="checkout-btn">
+                        <button type="submit" class="chkout-btn btn-link" onclick="FinalConfirm();">
+                            تایید نهایی
+                            سفارش
+                        </button>
                     </div>
-                    <div class="order-d">
-                        <div class="item-dt-left">
-                            <span>هزینه ارسال</span>
-                        </div>
-                        <div class="item-dt-right">
-                            <p>
-                                {{ order.get_delivery_fee |intcomma }} تومان
-                            </p>
-                        </div>
-                    </div>
-                    <div class="total-bill">
-                        <div class="total-bill-text">
-                            <h5>قابل پرداخت</h5>
-                        </div>
-                        <div class="total-bill-payment">
-                            <p>
-                                {{ order.total_price|intcomma }} تومان
-                            </p>
-                        </div>
-                    </div>
-                </div>
-                <div class="checkout-btn">
-                    <button type="submit" class="chkout-btn btn-link" onclick="FinalConfirm();">
-                        تایید نهایی
-                        سفارش
-                    </button>
                 </div>
             </div>
         </div>
-    </div>
-</section>
-
-{% csrf_token %}
-
-<script>
+    </section>
+    {% csrf_token %}
+    <script>
+    $('input[type=radio][name=rdb_resivetype]').change(function() {
+        const csrftoken = $('[name=csrfmiddlewaretoken]').val();
+        $.ajax({
+            headers: {
+                'X-CSRFToken': csrftoken
+            },
+            url: "{% url 'restaurant:Checkout' %}",
+            type: "POST",
+            dataType: 'json',
+            data: {
+                resive_type: $('input[name="rdb_resivetype"]:checked').val(),
+                resive_type_change: true,
+            },
+            success: function (response) {
+                if (response["response"] == "success") {
+                    window.location.reload();
+                } else {
+                    toastr.error(response["error"], '', { timeOut: 5000 });
+                    if (response["redirect"]) {
+                        window.location.href = response["redirect"];
+                    }
+                }
+            }
+        });
+    });
     function FinalConfirm() {
         const csrftoken = $('[name=csrfmiddlewaretoken]').val();
         $.ajax({
@@ -174,7 +240,5 @@
             }
         });
     }
-</script>
-
-
+    </script>
 {% endblock content %}

@@ -36,6 +36,10 @@ class Restaurant(models.Model):
         auto_now=False, auto_now_add=False, null=True, blank=True
     )
     description = models.TextField(null=True, blank=True)
+    max_reserve_time = models.SmallIntegerField(default=7)
+    tax_delivery = models.SmallIntegerField(default=0, verbose_name="مالیات بر پیک")
+    tax_food = models.SmallIntegerField(default=0, verbose_name="مالیات بر غذا")
+    tax_fix = models.IntegerField(default=0, verbose_name="مالیات ثابت")
 
     def __str__(self):
         return self.name
