@@ -105,7 +105,7 @@
                                                                     <button class="trash-btn btn-link">
                                                                         <i class="far fa-trash-alt"></i>
                                                                     </button>
-                                                                    //TODO:add delete action
+                                                                    <!-- TODO:add delete action -->
                                                                 {% endif %}
                                                                 <div class="modal fade"
                                                                      tabindex="-1"
@@ -152,10 +152,10 @@
                                                                                                         </h1>
                                                                                                         <div class="driver m-3">
                                                                                                             <div class="row row-driver m-3">
-                                                                                                                <div class="item-driver">نام و نام خانوادگی: {{ order.deliver.get.driver.full_name }}</div>
+                                                                                                                <div class="item-driver">نام و نام خانوادگی: {{ order.get_deliver_drive_name }}</div>
                                                                                                             </div>
                                                                                                             <div class="row row-driver m-3">
-                                                                                                                <div class="item-driver">شماره تلفن: {{ order.deliver.get.driver.user.profile.phone }}</div>
+                                                                                                                <div class="item-driver">شماره تلفن: {{ order.get_deliver_drive_phone }}</div>
                                                                                                             </div>
                                                                                                         </div>
                                                                                                     </div>

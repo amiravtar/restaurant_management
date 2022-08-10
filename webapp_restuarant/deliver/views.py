@@ -46,7 +46,7 @@ class Detail(DetailView):
                 deliver.end_time = datetime.now()
                 deliver.save()
                 deliver.order.save()
-                messages.success()(
+                messages.success(
                     request,
                     "با موفقیت ثبت شد",
                 )

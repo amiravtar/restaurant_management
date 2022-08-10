@@ -3,6 +3,8 @@ from order.models import FoodCount, Order, OrderDate, DateFoodCount
 from jalali_date.admin import ModelAdminJalaliMixin
 from jalali_date import datetime2jalali, date2jalali
 from utils.date_persian import date_fromgregorian
+from django.db.models import Q
+import pdb
 import logging
 
 # Register your models here.
@@ -16,8 +18,28 @@ def get_order_date(modeladmin, request, queryset):
             logger.warning("Coudnt get order_date for order {0}".format(obj.id))
 
 
+class OrderDateFoodsInline(admin.TabularInline):
+    model = OrderDate.foods.through
+    extra = 0
+
+    def formfield_for_foreignkey(self, db_field, request, **kwargs):
+        if db_field.name == "datefoodcount":
+            if "object_id" in request.resolver_match.kwargs:
+                kwargs["queryset"] = DateFoodCount.objects.filter(
+                    Q(order_date__isnull=True)
+                    | Q(order_date__id=request.resolver_match.kwargs["object_id"])
+                )
+            else:
+                kwargs["queryset"] = DateFoodCount.objects.filter(
+                    Q(order_date__isnull=True)
+                )
+        q = super().formfield_for_foreignkey(db_field, request, **kwargs)
+        return q
+
+
 class OrderDateAdmin(ModelAdminJalaliMixin, admin.ModelAdmin):
-    pass
+    inlines = [OrderDateFoodsInline]
+    exclude = ["foods"]
 
 
 class OrderAdmin(ModelAdminJalaliMixin, admin.ModelAdmin):

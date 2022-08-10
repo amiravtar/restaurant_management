@@ -7,6 +7,7 @@ webapp_restuarant/.pre-commit-config.yaml
 .vscode
 Templates
 webapp_restuarant/uploads/
+Docs/Other/
 #Django and logs
 *.log
 *.pot
@@ -156,3 +157,5 @@ venv.bak/
 #  and can be added to the global gitignore or merged into this file.  For a more nuclear
 #  option (not recommended) you can uncomment the following to ignore the entire idea folder.
 #.idea/
+
+Docs/other/Voice/1.mp4

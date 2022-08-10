@@ -62,7 +62,7 @@
                                     <td class="td-content"></td>
                                     <td class="td-content">{{ order.food_counts }}</td>
                                     <td class="td-content"></td>
-                                    <td class="td-content">{{ order.sum_foods_price }} تومان</td>
+                                    <td class="td-content">{{ order.sum_foods_price|intcomma }} تومان</td>
                                 </tr>
                             </tfoot>
                         </table>
@@ -130,7 +130,7 @@
                         </div>
                         <div class="total-bill-payment">
                             <p>
-                                {{ order.total_price }} تومان
+                                {{ order.total_price|intcomma }} تومان
                             </p>
                         </div>
                     </div>

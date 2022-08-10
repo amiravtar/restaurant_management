@@ -3,6 +3,8 @@ from django.db.models.signals import pre_delete, m2m_changed
 from django.dispatch import receiver
 from utils.date_persian import date_fromgregorian
 from django.core.exceptions import ValidationError
+
+from deliver.models import Deliver
 import logging
 
 # Create your models here.
@@ -34,6 +36,14 @@ class DateFoodCount(models.Model):
 
     def __str__(self):
         return " | ".join([self.food.name, str(self.count)])
+        # return " | ".join(
+        #     [
+        #         self.food.name,
+        #         str(self.count),
+        #         str(self.order_date.count()),
+        #         str(self.order_date.get().id if self.order_date.exists() else "N"),
+        #     ]
+        # )
 
 
 class OrderDate(models.Model):
@@ -56,6 +66,11 @@ class OrderDate(models.Model):
 
     def __str__(self):
         return date_fromgregorian(self.date).strftime("%Y/%m/%d %b %a")
+        # return (
+        #     date_fromgregorian(self.date).strftime("%Y/%m/%d %b %a")
+        #     + "|"
+        #     + str(self.id)
+        # )
 
 
 @receiver(pre_delete, sender=OrderDate)
@@ -182,6 +197,10 @@ class Order(models.Model):
     def show_status_name(self):
         status_choices_dict = dict(self.ORDER_STATUS)
         return status_choices_dict[self.status]
+    @property
+    def show_deliver_status_name(self):
+        status_choices_dict = dict(Deliver.STATUS_TYPE)
+        return status_choices_dict[self.deliver.get().status]
 
     @property
     def get_created_date(self):
@@ -194,9 +213,44 @@ class Order(models.Model):
     @property
     def is_deletable(self):
         return self.status in [self.TEMP, self.PENDING_CONFIRM]
-    
+
     @property
     def is_delivery(self):
-        return self.receive_type ==Order.DELIVER
-    
+        return self.deliver.exists()
 
+    @property
+    def get_deliver_drive_name(self):
+        try:
+            return self.deliver.get().driver.full_name
+        except Exception as e:
+            logger.error(e)
+            return ""
+
+    @property
+    def get_deliver_drive_phone(self):
+        try:
+            return self.deliver.get().driver.user.profile.phone
+        except Exception as e:
+            logger.error(e)
+            return ""
+
+
+@receiver(pre_delete, sender=Order)
+def order_pre_delete(sender, instance, **kwargs):
+    if instance.order_date == None:
+        raise ValidationError("سفارش انتخابی تاریخ مرجعی ندارد")
+    order_date = instance.order_date
+    dfcs = DateFoodCount.objects.filter(order_date__id=order_date.id)
+    for fc in instance.foods.all():
+        df = dfcs.filter(food=fc.food)
+        if df.exists():
+            df = df[0]
+        else:
+            logger.error(
+                "DateFoodCount with food {0} Dosent exist for this order {1}".format(
+                    fc.food, instance.id
+                )
+            )
+            raise ValidationError("غذای مورد نظر پیدا نشد")
+        df.count = df.count + fc.count
+        df.save()

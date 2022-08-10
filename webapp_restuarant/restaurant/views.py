@@ -1,4 +1,5 @@
 import json
+from sre_constants import SUCCESS
 from django.http import Http404, JsonResponse
 from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
@@ -6,10 +7,10 @@ from django.views import View
 from django.views.generic import ListView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import get_object_or_404
-
+from django.core.exceptions import ValidationError
 from food.models import Food
 from .models import Restaurant
-from order.models import Order, OrderDate
+from order.models import DateFoodCount, Order, OrderDate
 from django.contrib import messages
 from utils.order import get_or_create_order_food, get_session_order
 import datetime as py_datetime
@@ -107,6 +108,7 @@ class Menu(LoginRequiredMixin, View):
         return data
 
     def check_foods_with_order_date(self, order_date: OrderDate, data: dict):
+        # return order if success
         order: Order = Order.objects.create(
             user=self.request.user,
             restaurant=order_date.restaurant,
@@ -120,12 +122,12 @@ class Menu(LoginRequiredMixin, View):
             food = Food.objects.filter(pk=i)
             if not food.exists():
                 messages.error(self.request, "غذای مورد نظر وجود ندارد")
-                return False
+                return None
             food = food[0]
             fc = order_date.foods.filter(food=food)
             if not fc.exists():
                 messages.error(self.request, "غذای مورد نظر برای این روز وجود ندارد")
-                return False
+                return None
             fc = fc[0]
             if data["foods"][i]["count"] > fc.count:
                 messages.error(
@@ -134,12 +136,31 @@ class Menu(LoginRequiredMixin, View):
                         food.name
                     ),
                 )
-                return False
+                return None
             order_food_count = get_or_create_order_food(food, data["foods"][i]["count"])
             order.foods.add(order_food_count)
         order.save()
         self.request.session["order_data"] = order.id
-        return True
+        return order
+
+    def reduce_date_order_food(self, order: Order):
+        if order.order_date == None:
+            raise ValidationError("سفارش انتخابی تاریخ مرجعی ندارد")
+        order_date = order.order_date
+        dfcs = DateFoodCount.objects.filter(order_date__id=order_date.id)
+        for fc in order.foods.all():
+            df = dfcs.filter(food=fc.food)
+            if df.exists():
+                df = df[0]
+            else:
+                logger.error(
+                    "DateFoodCount with food {0} Dosent exist for this order {1}".format(
+                        fc.food, order.id
+                    )
+                )
+                raise ValidationError("غذای مورد نظر پیدا نشد")
+            df.count = df.count - fc.count
+            df.save()
 
     def get(self, request, pk):
         restaurant = get_object_or_404(Restaurant, pk=pk)
@@ -167,7 +188,9 @@ class Menu(LoginRequiredMixin, View):
             elif request.POST["mod"] == "checkout":
                 data = json.loads(request.POST["data"])
                 order_date = get_object_or_404(OrderDate, pk=request.POST["date"])
-                if self.check_foods_with_order_date(order_date, data):
+                order = self.check_foods_with_order_date(order_date, data)
+                if order is not None:
+                    self.reduce_date_order_food(order)
                     return JsonResponse(
                         {
                             "response": "success",
