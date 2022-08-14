@@ -41,12 +41,19 @@ class Checkout(View):
                     "error": "زمان تایید سفارش شما به اتمام رسیده",
                 }
             )
-        if "resive_type" in request.POST and "order_address" in request.POST:
+        if (
+            "resive_type" in request.POST
+            and "order_address" in request.POST
+            and "meal_type" in request.POST
+        ):
             order.address = request.POST["order_address"]
             order.resive_type = (
                 Order.TAKEOUT
                 if request.POST["resive_type"] == "takeout"
                 else Order.DELIVER
+            )
+            order.meal_type = (
+                Order.DINNER if request.POST["meal_type"] == "dinner" else Order.LUNCH
             )
             order.status = Order.PENDING_CONFIRM
             order.save()

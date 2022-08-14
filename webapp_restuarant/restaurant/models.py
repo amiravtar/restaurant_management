@@ -3,8 +3,15 @@ from django.urls import reverse_lazy
 
 
 def restaurant_directory_path(instance, filename):
-    "Generate restaurant image path"
-    # file will be uploaded to MEDIA_ROOT/user_<id>/<filename>
+    """_summary_
+    Return a Path for Uploaded Restaurant images
+    Args:
+        instance (Food): Created Restaurant
+        filename (str): Name of uploaded file
+
+    Returns:
+        str: Path for uploaded file
+    """  # file will be uploaded to MEDIA_ROOT/user_<id>/<filename>
     return "restaurants/{0}/{0}_profile.{1}".format(
         instance.id, filename.split(".")[-1]
     )
@@ -12,6 +19,9 @@ def restaurant_directory_path(instance, filename):
 
 # Create your models here.
 class Restaurant(models.Model):
+    """_summary_
+    Restaurant Tables
+    """
     name = models.CharField(max_length=20)
     image = models.ImageField(
         null=True,
@@ -21,9 +31,7 @@ class Restaurant(models.Model):
         width_field=None,
         max_length=None,
     )
-    admin = models.OneToOneField(
-        "user.User", on_delete=models.CASCADE, related_name="restaurant"
-    )
+    admin = models.ForeignKey("user.User", on_delete=models.CASCADE)
     address = models.CharField(max_length=80)
     phone = models.CharField(max_length=12)
     deliver_fee = models.IntegerField(null=True, blank=True, default=0)
@@ -37,9 +45,15 @@ class Restaurant(models.Model):
     )
     description = models.TextField(null=True, blank=True)
     max_reserve_time = models.SmallIntegerField(default=7)
-    tax_delivery = models.SmallIntegerField(default=0, verbose_name="مالیات بر پیک")
-    tax_food = models.SmallIntegerField(default=0, verbose_name="مالیات بر غذا")
-    tax_fix = models.IntegerField(default=0, verbose_name="مالیات ثابت")
+    tax_delivery = models.SmallIntegerField(
+        default=0,
+    )
+    tax_food = models.SmallIntegerField(
+        default=0,
+    )
+    tax_fix = models.IntegerField(
+        default=0,
+    )
 
     def __str__(self):
         return self.name
@@ -75,6 +89,9 @@ class Restaurant(models.Model):
 
 
 class Driver(models.Model):
+    """_summary_
+    Holds Drivers
+    """
     user = models.ForeignKey("user.User", on_delete=models.CASCADE)
     restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE)
     is_available = models.BooleanField(default=False)

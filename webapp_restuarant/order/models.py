@@ -13,6 +13,10 @@ logger = logging.getLogger("app")
 
 
 class FoodCount(models.Model):
+    """_summary_
+    Each Order has some foods.
+    this model holds the fods and count of them
+    """
     food = models.ForeignKey("food.Food", on_delete=models.CASCADE)
     count = models.IntegerField()
 
@@ -25,15 +29,12 @@ class FoodCount(models.Model):
 
 
 class FixMenu(models.Model):
-    class Meta:
-        verbose_name = "منوی ثابت"
-        verbose_name_plural = "منو های ثابت"
-
-    name = models.CharField("نام منو", max_length=50)
-    restaurant = models.ForeignKey(
-        "restaurant.Restaurant", verbose_name="رستوران", on_delete=models.CASCADE
-    )
-    foods = models.ManyToManyField("food.Food", verbose_name="غذا ها")
+    """_summary_
+    A list of Foods that are always in menu.
+    """
+    name = models.CharField(max_length=50)
+    restaurant = models.ForeignKey("restaurant.Restaurant", on_delete=models.CASCADE)
+    foods = models.ManyToManyField("food.Food")
 
     def __str__(self):
         return " | ".join([self.name, str([f.name for f in self.foods.all()])])
@@ -69,27 +70,16 @@ class OrderDate(models.Model):
 
     """
 
-    class Meta:
-        verbose_name = "منوی تاریخ دار"
-        verbose_name_plural = "منو های تاریخ دار"
-
-    date = models.DateField(
-        auto_now=False, auto_now_add=False, unique=True, verbose_name="تاریخ"
-    )
-    foods = models.ManyToManyField(
-        DateFoodCount, blank=True, related_name="order_date", verbose_name="غذاها"
-    )
-    restaurant = models.ForeignKey(
-        "restaurant.Restaurant", on_delete=models.CASCADE, verbose_name="رستوران مربوطه"
-    )
+    date = models.DateField(auto_now=False, auto_now_add=False, unique=True)
+    foods = models.ManyToManyField(DateFoodCount, blank=True, related_name="order_date")
+    restaurant = models.ForeignKey("restaurant.Restaurant", on_delete=models.CASCADE)
     fix_menu = models.ForeignKey(
         FixMenu,
-        verbose_name="منوی ثابت",
         on_delete=models.CASCADE,
         null=True,
         blank=True,
     )
-    disable = models.BooleanField(verbose_name="غیر فعال", default=False)
+    disable = models.BooleanField(default=False)
 
     def __str__(self):
         return date_fromgregorian(self.date).strftime("%Y/%m/%d %b %a")
@@ -122,11 +112,21 @@ def order_date_post_save(sender, instance, action, **kwargs):
 
 
 class Order(models.Model):
+    """_summary_
+    Store Orders.
+    Adn some functions to ge tinfo about Order
+    """
     TAKEOUT = "takeout"
     DELIVER = "deliver"
     RECEIVE_TYPE = [
         (TAKEOUT, "تحویل حضوری"),
         (DELIVER, "ارسال درب منزل"),
+    ]
+    DINNER = "dinner"
+    LUNCH = "lunch"
+    MEAL_TYPE = [
+        (DINNER, "ناهار"),
+        (LUNCH, "شام"),
     ]
 
     TEMP = "temp"
@@ -149,38 +149,29 @@ class Order(models.Model):
         (NOT_CONFIRM, "تایید نشده"),
     ]
 
-    user = models.ForeignKey(
-        "user.User", on_delete=models.CASCADE, verbose_name="کاربر"
-    )
+    user = models.ForeignKey("user.User", on_delete=models.CASCADE)
     restaurant = models.ForeignKey(
         "restaurant.Restaurant",
         on_delete=models.CASCADE,
         related_name="orders",
-        verbose_name="رستوران  ",
     )
     receive_type = models.CharField(
         max_length=20, blank=True, null=True, choices=RECEIVE_TYPE
     )
-    status = models.CharField(
-        choices=ORDER_STATUS, max_length=50, default=TEMP, verbose_name="وضعیت"
-    )
+    status = models.CharField(choices=ORDER_STATUS, max_length=50, default=TEMP)
 
-    description = models.TextField(null=True, blank=True, verbose_name="توضیحات")
-    foods = models.ManyToManyField(FoodCount, blank=True, verbose_name="غذاها")
+    description = models.TextField(null=True, blank=True)
+    foods = models.ManyToManyField(FoodCount, blank=True)
     created_on = models.DateTimeField(auto_now_add=True)
-    address = models.CharField(
-        max_length=70, null=True, blank=True, verbose_name="آدرس گیرنده"
-    )
-    target_date = models.DateField(
-        auto_now=False, auto_now_add=False, verbose_name="تاریخ تحویل سفارش"
-    )
+    address = models.CharField(max_length=70, null=True, blank=True)
+    target_date = models.DateField(auto_now=False, auto_now_add=False)
     order_date = models.ForeignKey(
         OrderDate,
         on_delete=models.CASCADE,
         blank=True,
         null=True,
-        verbose_name="تاریخ مرجع",
     )
+    meal_type = models.CharField(choices=MEAL_TYPE, default=DINNER, max_length=20)
 
     # Managers
     def __str__(self):
@@ -245,9 +236,15 @@ class Order(models.Model):
     def fix_tax(self):
         return self.restaurant.tax_fix
 
+    @property
     def show_receive_type(self):
         status_dict = dict(self.RECEIVE_TYPE)
         return status_dict[self.receive_type]
+
+    @property
+    def show_meal_type(self):
+        status_dict = dict(self.MEAL_TYPE)
+        return status_dict[self.meal_type]
 
     def show_status_name(self):
         status_choices_dict = dict(self.ORDER_STATUS)
@@ -279,6 +276,10 @@ class Order(models.Model):
         return self.receive_type == self.TAKEOUT
 
     @property
+    def is_dinner(self):
+        return self.meal_type == self.DINNER
+
+    @property
     def get_deliver_drive_name(self):
         try:
             return self.deliver.get().driver.full_name
@@ -297,8 +298,12 @@ class Order(models.Model):
 
 @receiver(pre_delete, sender=Order)
 def order_pre_delete(sender, instance, **kwargs):
+    """_summary_
+    Receiver for whene Order is Deleted.
+    Restore DateFoodCount counts
+    """
     if instance.order_date == None:
-        raise ValidationError("سفارش انتخابی تاریخ مرجعی ندارد")
+        raise ValidationError("Selected Order has no Order_Date")
     order_date = instance.order_date
     dfcs = DateFoodCount.objects.filter(order_date__id=order_date.id)
     for fc in instance.foods.all():
@@ -310,10 +315,10 @@ def order_pre_delete(sender, instance, **kwargs):
                 continue
             else:
                 logger.error(
-                    "DateFoodCount with food {0} Dosent exist for this order {1}".format(
+                    "DateFoodCount  with food {0} Dosent exist for this order {1}".format(
                         fc.food, instance.id
                     )
                 )
-            raise ValidationError("غذای مورد نظر پیدا نشد")
+            raise ValidationError("Food not found")
         df.count = df.count + fc.count
         df.save()

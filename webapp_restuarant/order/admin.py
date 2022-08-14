@@ -45,14 +45,12 @@ class OrderDateAdmin(ModelAdminJalaliMixin, admin.ModelAdmin):
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         if db_field.name == "fix_menu":
-            try:
+            if "object_id" in request.resolver_match.kwargs:
                 obj_id = request.resolver_match.kwargs["object_id"]
                 kwargs["queryset"] = FixMenu.objects.filter(
-                    restaurant__id=OrderDate.objects.get(id=obj_id).restaurant
+                    restaurant__id=OrderDate.objects.get(id=obj_id).restaurant.id
                 )
-                print(request.resolver_match.kwargs["object_id"])
-            except Exception as e:
-                logger.info(e)
+            else:
                 kwargs["queryset"] = FixMenu.objects.filter(
                     restaurant__admin=request.user
                 )

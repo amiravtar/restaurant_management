@@ -6,6 +6,10 @@ from django.core.exceptions import ValidationError
 
 # Create your models here.
 class Deliver(models.Model):
+    """_summary_
+    Whene a Food wants to be deliverd this model holds the info
+    """
+
     INWAY = "inway"
     WAIT_FOR_READY = "wating_for_ready"
     PICKUP = "pickup"
@@ -54,11 +58,9 @@ class Deliver(models.Model):
     def clean(self) -> None:
         if self.order:
             if self.order.receive_type not in [Order.DELIVER]:
-                raise ValidationError({"order": "نوع تحویل سفارش انتخاب شده حضوری است"})
+                raise ValidationError({"order": "Selected Order is TAKEOUT"})
             if self.order.status not in [Order.DELIVERED, Order.DELIVERY]:
                 raise ValidationError(
-                    {
-                        "order": "سفارش نمیتواند در وضعیت تحویل به پیک یا تحویل داده شده نباشد"
-                    }
+                    {"order": "Selected Order must be in delivery Status ord Delivered"}
                 )
         return super().clean()

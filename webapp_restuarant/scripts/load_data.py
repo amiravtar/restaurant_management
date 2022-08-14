@@ -5,7 +5,7 @@ import os
 if len(sys.argv) > 1:
     apps = sys.argv[1:]
 else:
-    apps = ["user", "restaurant", "food", "order"]  # deliver
+    apps = ["restaurant", "food", "order"]  # deliver user
 
 for i in apps:
     if i == "user":

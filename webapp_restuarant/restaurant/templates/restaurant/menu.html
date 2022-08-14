@@ -15,6 +15,11 @@
                   <img src="images/homepage/meals/logo-2.jpg" alt="">
                 </a>
               </div>
+              {% if restaurant.image %}
+                <img src="{{ restaurant.image.url }}" alt="">
+              {% else %}
+                <img src="{% static 'user/images/default_image.jpg' %}" alt="">
+              {% endif %}
               <div class="name-location">
                 <a href="#" class="text-light">
                   <h1>{{ restaurant.name }}</h1>
@@ -60,93 +65,94 @@
                                   placeholder="تاریخ"
                                   onchange="send_date();">
                             {% for date in order_dates.all %}
-                                    <option value="{{ date.id }}" {% if date.disable %}disabled{% endif %}>
-                                    {{ date }} {% if date.disable %}غیر فعال{% endif %}
-                                  </option>
-                                {% endfor %}
-                              </select>
-                            </div>
-                          </div>
-                        </form>
+                              <option value="{{ date.id }}" {% if date.disable %}disabled{% endif %}>
+                                {{ date }}
+                                {% if date.disable %}غیر فعال{% endif %}
+                              </option>
+                            {% endfor %}
+                          </select>
+                        </div>
                       </div>
-                      <div class="order-tabs">
-                        <ul class="nav nav-tabs">
-                          {% for cate in restaurant.get_foods_category_list %}
-                            <li>
-                              <a href="#id_{{ cate.id }}" data-toggle="tab">
-                                <div class="meal-tab-icons">
-                                  {% if cate.image %}
-                                    <img src="{{ cate.image.url }}" class="img-responsive" alt="">
-                                  {% else %}
-                                    <img src="{% static 'user/images/category/default.png' %}"
-                                         class="img-responsive"
-                                         alt="">
-                                  {% endif %}
-                                  <p>
-                                    {{ cate.name }}
-                                  </p>
-                                </div>
-                              </a>
-                            </li>
-                          {% endfor %}
-                        </ul>
-                      </div>
-                      <div class="tab-content" id="tab_foods"></div>
-                    </div>
+                    </form>
                   </div>
-                  <div class="tab-pane" id="restaurant-info">
-                    <div class="restaurants-detail-bg">
-                      <h4>اطلاعات رستوران</h4>
-                      <div class="overview-details">
-                        <div class="container">
-                          <div class="row">
-                            <div class="col-md-6">
-                              <div class="flex-dt">
-                                <ul class="view-dt">
-                                  <li>{{ restaurant.name }}</li>
-                                  <li>
-                                    <address> <i class="fa fa-map-marker-alt"></i>{{ restaurant.address }}</address>
-                                  </li>
-                                  <li>{{ restaurant.phone }}</li>
-                                </ul>
-                              </div>
+                  <div class="order-tabs">
+                    <ul class="nav nav-tabs">
+                      {% for cate in restaurant.get_foods_category_list %}
+                        <li>
+                          <a href="#id_{{ cate.id }}" data-toggle="tab">
+                            <div class="meal-tab-icons">
+                              {% if cate.image %}
+                                <img src="{{ cate.image.url }}" class="img-responsive" alt="">
+                              {% else %}
+                                <img src="{% static 'user/images/category/default.png' %}"
+                                     class="img-responsive"
+                                     alt="">
+                              {% endif %}
+                              <p>
+                                {{ cate.name }}
+                              </p>
                             </div>
-                            <div class="col-md-6">
-                              <div class="flex-dt">
-                                <ul class="view-dt">
-                                  <li>ساعت باز شدن {{ restaurant.get_open_hour }}</li>
-                                  <li>ساعت بسته شدن {{ restaurant.get_close_hour }}</li>
-                                </ul>
-                              </div>
-                            </div>
+                          </a>
+                        </li>
+                      {% endfor %}
+                    </ul>
+                  </div>
+                  <div class="tab-content" id="tab_foods"></div>
+                </div>
+              </div>
+              <div class="tab-pane" id="restaurant-info">
+                <div class="restaurants-detail-bg">
+                  <h4>اطلاعات رستوران</h4>
+                  <div class="overview-details">
+                    <div class="container">
+                      <div class="row">
+                        <div class="col-md-6">
+                          <div class="flex-dt">
+                            <ul class="view-dt">
+                              <li>{{ restaurant.name }}</li>
+                              <li>
+                                <address> <i class="fa fa-map-marker-alt"></i>{{ restaurant.address }}</address>
+                              </li>
+                              <li>{{ restaurant.phone }}</li>
+                            </ul>
+                          </div>
+                        </div>
+                        <div class="col-md-6">
+                          <div class="flex-dt">
+                            <ul class="view-dt">
+                              <li>ساعت باز شدن {{ restaurant.get_open_hour }}</li>
+                              <li>ساعت بسته شدن {{ restaurant.get_close_hour }}</li>
+                            </ul>
                           </div>
                         </div>
                       </div>
                     </div>
-                    <div class="restaurants-detail-bg">
-                      <h4>توضیحات:</h4>
-                      <p>
-                        {{ restaurant.description }}
-                      </p>
-                    </div>
-                    <div class="ads-offer"></div>
                   </div>
                 </div>
+                <div class="restaurants-detail-bg">
+                  <h4>توضیحات:</h4>
+                  <p>
+                    {{ restaurant.description }}
+                  </p>
+                </div>
+                <div class="ads-offer"></div>
               </div>
             </div>
-            <div class="col-lg-3 col-md-3">
-              <div class="right-side">
-                <div class="dt-detail box-dt-detail">
-                  <ul>
-                    <li>
-                      <div class="delivery">
-                        <i class="fas fa-shopping-cart"></i> سبد خرید
-                      </div>
-                    </li>
-                  </ul>
-                </div>
-                <div id="cart">
-                  {% comment %} {% if order %}
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-3">
+          <div class="right-side">
+            <div class="dt-detail box-dt-detail">
+              <ul>
+                <li>
+                  <div class="delivery">
+                    <i class="fas fa-shopping-cart"></i> سبد خرید
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div id="cart">
+              {% comment %} {% if order %}
               {% for food in order.foods.all %}
               <div class="Qty" id="cart_item_{{food.food.id}}" data-id="{{food.food.id}}">
                 <h4 id="cart_item_{{food.food.id}}_name">{{food.food.name}}</h4>
@@ -160,33 +166,33 @@
                     </div>
                 </div>
               {% endfor %}
-                  {% endif %} {% endcomment %}
-                </div>
-              </div>
-              <div class="total-cost mb-3">
-                <div class="mt-3">
-                  <span class="text-dark font-weight-bold">جمع سفارش</span> <span class="float-left text-dark"><span id="cart_price" data-price="0">۰</span>تومان</span>
-                </div>
-              </div>
-              <div class="box-textarea-container">
-                <div class="basket-header">
-                  <i class="fa fa-pencil-alt"></i> برای رستوران یادداشتی دارید؟ اینجا بنویسید...
-                </div>
-                <textarea id="order_comment"
-                          maxlength="1024"
-                          class="form-control order_comment"
-                          placeholder="اگر پیشنهادی درمورد نحوه&zwnj;ی ارسال یا سفارش خود دارید، در این قسمت بنویسید."></textarea>
-              </div>
-              <div class="order-now-check">
-                <button class="on-btn btn-link" onclick="Checkout();">بررسی نهایی</button>
-              </div>
+              {% endif %} {% endcomment %}
             </div>
+          </div>
+          <div class="total-cost mb-3">
+            <div class="mt-3">
+              <span class="text-dark font-weight-bold">جمع سفارش</span> <span class="float-left text-dark"><span id="cart_price" data-price="0">۰</span>تومان</span>
+            </div>
+          </div>
+          <div class="box-textarea-container">
+            <div class="basket-header">
+              <i class="fa fa-pencil-alt"></i> برای رستوران یادداشتی دارید؟ اینجا بنویسید...
+            </div>
+            <textarea id="order_comment"
+                      maxlength="1024"
+                      class="form-control order_comment"
+                      placeholder="اگر پیشنهادی درمورد نحوه&zwnj;ی ارسال یا سفارش خود دارید، در این قسمت بنویسید."></textarea>
+          </div>
+          <div class="order-now-check">
+            <button class="on-btn btn-link" onclick="Checkout();">بررسی نهایی</button>
           </div>
         </div>
       </div>
-    </section>
-    {% csrf_token %}
-    <script>
+    </div>
+  </div>
+</section>
+{% csrf_token %}
+<script>
   cart_foods = {};
 
   function UpdateCart() {
@@ -292,7 +298,6 @@
       success: function (response) {
         if (response["response"] == "success") {
           var data = JSON.parse(response['data']);
-          console.log(data);
           // Clear previos foods
           $("#tab_foods").empty();
           cart_foods = {};
@@ -399,5 +404,5 @@
       alert("غذایی انتخاب نکرده اید")
     }
   }
-    </script>
-  {% endblock content %}
+</script>
+{% endblock content %}

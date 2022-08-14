@@ -6,13 +6,23 @@ from django.urls import reverse_lazy
 
 
 def user_directory_path(instance, filename):
-    "Generate profile image path"
-    # file will be uploaded to MEDIA_ROOT/user_<id>/<profile.format>
+    """_summary_
+    Return a Path for Uploaded User images
+    Args:
+        instance (Food): Created User
+        filename (str): Name of uploaded file
+
+    Returns:
+        str: Path for uploaded file
+    """    # file will be uploaded to MEDIA_ROOT/user_<id>/<profile.format>
     print(filename.split("."))
     return "users/{0}/profile.{1}".format(instance.id, filename.split(".")[-1])
 
 
 class User(djang_user):
+    """_summary_
+    A proxy model for django User
+    """
     class Meta:
         proxy = True
 
@@ -25,6 +35,10 @@ class User(djang_user):
 
 
 class Profile(models.Model):
+    """_summary_
+    Holds some extra information about user.
+    Its connected to user
+    """
     # user types
     ADMIN = "admin"
     ADMIN_RESTAURANT = "adminr"

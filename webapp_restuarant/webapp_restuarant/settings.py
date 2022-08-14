@@ -9,6 +9,7 @@ https://docs.djangoproject.com/en/4.0/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.0/ref/settings/
 """
+from ast import Try
 import os
 from pathlib import Path
 from django.urls import reverse_lazy
@@ -26,12 +27,16 @@ SECRET_KEY = "django-insecure-&3y(a!xl^5is14==7+c8em+icm7h_!8a(hm5x-1u(m)8y439+1
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["127.0.0.1", "localhost"]
 
 
 # Application definition
 
 INSTALLED_APPS = [
+    # General use templates & template tags (should appear first)
+    "adminlte3",
+    # Optional: Django admin theme (must be before django.contrib.admin)
+    "adminlte3_theme",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -48,8 +53,7 @@ INSTALLED_APPS = [
     "panel",
     "user",
     "debug_toolbar",
-
-    'django_cleanup.apps.CleanupConfig',
+    "django_cleanup.apps.CleanupConfig",
 ]
 
 MIDDLEWARE = [
@@ -60,7 +64,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
-    "debug_toolbar.middleware.DebugToolbarMiddleware",
+    # "debug_toolbar.middleware.DebugToolbarMiddleware",
 ]
 
 ROOT_URLCONF = "webapp_restuarant.urls"
@@ -121,7 +125,7 @@ LANGUAGE_CODE = "en-us"
 
 TIME_ZONE = "Asia/Tehran"
 
-USE_I18N = False
+USE_I18N = True
 
 USE_TZ = False
 
@@ -166,7 +170,9 @@ LOGGING = {
     },
     "formatters": {
         "console": {"format": "%(name)-12s %(levelname)-8s %(message)s"},
-        "file": {"format": "%(asctime)s %(name)-12s %(levelname)-8s %(message)s"},
+        "file": {
+            "format": "%(asctime)s %(name)-12s %(filename)-5s %(funcName)-5s %(levelname)-8s %(message)s"
+        },
     },
     "loggers": {
         "": {

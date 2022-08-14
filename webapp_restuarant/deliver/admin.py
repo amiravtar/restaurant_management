@@ -1,4 +1,3 @@
-from ast import Del
 from django.contrib import admin
 from .models import Deliver
 from order.models import Order
@@ -13,5 +12,6 @@ class DeliverAdmin(admin.ModelAdmin):
                 status__in=[Order.DELIVERED, Order.DELIVERY], receive_type=Order.DELIVER
             )
         return super().formfield_for_foreignkey(db_field, request, **kwargs)
+
 
 admin.site.register(Deliver, DeliverAdmin)

@@ -98,6 +98,31 @@
                                 </div>
                             </div>
                         </div>
+                        <h4>
+                            نوع سفارش را مشخص کنید
+                        </h4>
+                        <div class="single-payment-method">
+                            <div class="payment-method-name">
+                                <div class="custom-control custom-radio pr-0">
+                                    <label>
+                                        <input type="radio"
+                                               name="rdb_mealtype"
+                                               value="lunch"
+                                               {% if not order.is_dinner %}checked{% endif %}>
+                                         شام
+                                    </label>
+                                </div>
+                                <div class="custom-control custom-radio1 pr-0">
+                                    <label>
+                                        <input type="radio"
+                                               name="rdb_mealtype"
+                                               value="dinner"
+                                               {% if order.is_dinner %}checked{% endif %}>
+                                        ناهار
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     <div class="right-contact-dt">
                         <h4>ثبت آدرس</h4>
@@ -226,6 +251,7 @@
             dataType: 'json',
             data: {
                 resive_type: $('input[name="rdb_resivetype"]:checked').val(),
+                meal_type: $('input[name="rdb_mealtype"]:checked').val(),
                 order_address: $('#order_address').val(),
             },
             success: function (response) {
