@@ -3,10 +3,8 @@ from order.models import FoodCount, Order, OrderDate, DateFoodCount, FixMenu
 from food.models import Food
 from restaurant.models import Restaurant
 from jalali_date.admin import ModelAdminJalaliMixin
-from jalali_date import datetime2jalali, date2jalali
 from utils.date_persian import date_fromgregorian
 from django.db.models import Q
-import pdb
 import logging
 
 # Register your models here.
@@ -56,6 +54,12 @@ class OrderDateAdmin(ModelAdminJalaliMixin, admin.ModelAdmin):
                 )
         return super().formfield_for_foreignkey(db_field, request, **kwargs)
 
+    def get_queryset(self, request):
+        if request.user.is_superuser:
+            return super().get_queryset(request)
+        else:
+            return OrderDate.objects.filter(restaurant__admin=request.user)
+
 
 class FixMenuFoodsInline(admin.TabularInline):
     model = FixMenu.foods.through
@@ -79,6 +83,12 @@ class FixMenuAdmin(admin.ModelAdmin):
             if not request.user.is_superuser:
                 kwargs["queryset"] = Restaurant.objects.filter(admin=request.user)
         return super().formfield_for_foreignkey(db_field, request, **kwargs)
+
+    def get_queryset(self, request):
+        if request.user.is_superuser:
+            return super().get_queryset(request)
+        else:
+            return FixMenu.objects.filter(restaurant__admin=request.user)
 
 
 class OrderAdmin(ModelAdminJalaliMixin, admin.ModelAdmin):
@@ -104,6 +114,11 @@ class OrderAdmin(ModelAdminJalaliMixin, admin.ModelAdmin):
     def get_target_date_jalali(self, obj):
         return date_fromgregorian(obj.target_date).strftime("%Y/%m/%d %b %a")
 
+    def get_queryset(self, request):
+        if request.user.is_superuser:
+            return super().get_queryset(request)
+        else:
+            return Order.objects.filter(restaurant__admin=request.user)
 
 class DateFoodCountAdmin(admin.ModelAdmin):
     def formfield_for_foreignkey(self, db_field, request, **kwargs):

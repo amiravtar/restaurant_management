@@ -1,6 +1,4 @@
 import json
-from pprint import pprint
-from sre_constants import SUCCESS
 from django.http import Http404, JsonResponse
 from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
@@ -90,7 +88,7 @@ class Checkout(View):
 class List(LoginRequiredMixin, ListView):
     template_name = "restaurant/list.html"
     model = Restaurant
-    resturants_list = Restaurant.objects.all()
+    queryset = Restaurant.objects.filter(is_open=True)
     paginate_by = 3
 
 
@@ -248,3 +246,4 @@ class Menu(LoginRequiredMixin, View):
                     )
                 else:
                     return JsonResponse({"response": "error"})
+        return Http404

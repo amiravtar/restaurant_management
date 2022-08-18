@@ -17,6 +17,7 @@ class FoodCount(models.Model):
     Each Order has some foods.
     this model holds the fods and count of them
     """
+
     food = models.ForeignKey("food.Food", on_delete=models.CASCADE)
     count = models.IntegerField()
 
@@ -32,6 +33,7 @@ class FixMenu(models.Model):
     """_summary_
     A list of Foods that are always in menu.
     """
+
     name = models.CharField(max_length=50)
     restaurant = models.ForeignKey("restaurant.Restaurant", on_delete=models.CASCADE)
     foods = models.ManyToManyField("food.Food")
@@ -70,7 +72,7 @@ class OrderDate(models.Model):
 
     """
 
-    date = models.DateField(auto_now=False, auto_now_add=False, unique=True)
+    date = models.DateField(auto_now=False, auto_now_add=False)
     foods = models.ManyToManyField(DateFoodCount, blank=True, related_name="order_date")
     restaurant = models.ForeignKey("restaurant.Restaurant", on_delete=models.CASCADE)
     fix_menu = models.ForeignKey(
@@ -80,6 +82,12 @@ class OrderDate(models.Model):
         blank=True,
     )
     disable = models.BooleanField(default=False)
+
+    def clean(self):
+        od = OrderDate.objects.filter(date=self.date, restaurant=self.restaurant)
+        if od.exists():
+            raise ValidationError("Order Date with same date and restaurant exist")
+        return super().clean()
 
     def __str__(self):
         return date_fromgregorian(self.date).strftime("%Y/%m/%d %b %a")
@@ -116,6 +124,7 @@ class Order(models.Model):
     Store Orders.
     Adn some functions to ge tinfo about Order
     """
+
     TAKEOUT = "takeout"
     DELIVER = "deliver"
     RECEIVE_TYPE = [
