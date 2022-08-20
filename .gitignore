@@ -7,7 +7,7 @@ webapp_restuarant/.pre-commit-config.yaml
 .vscode
 Templates
 webapp_restuarant/uploads/
-Docs/Other/
+Docs/
 #Django and logs
 *.log
 *.pot

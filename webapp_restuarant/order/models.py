@@ -83,11 +83,12 @@ class OrderDate(models.Model):
     )
     disable = models.BooleanField(default=False)
 
-    def clean(self):
-        od = OrderDate.objects.filter(date=self.date, restaurant=self.restaurant)
-        if od.exists():
-            raise ValidationError("Order Date with same date and restaurant exist")
-        return super().clean()
+    # def clean(self):
+    #     od = OrderDate.objects.filter(date=self.date, restaurant=self.restaurant)
+    #     if od.exists():
+    #         if od != self:
+    #             raise ValidationError("Order Date with same date and restaurant exist")
+    #     return super().clean()
 
     def __str__(self):
         return date_fromgregorian(self.date).strftime("%Y/%m/%d %b %a")

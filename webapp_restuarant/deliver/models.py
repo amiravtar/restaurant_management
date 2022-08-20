@@ -55,12 +55,12 @@ class Deliver(models.Model):
         if self.status in [Deliver.PICKUP, Deliver.INWAY]:
             return int((datetime.now() - self.start_time).seconds / 60)
 
-    def clean(self) -> None:
-        if self.order:
-            if self.order.receive_type not in [Order.DELIVER]:
-                raise ValidationError({"order": "Selected Order is TAKEOUT"})
-            if self.order.status not in [Order.DELIVERED, Order.DELIVERY]:
-                raise ValidationError(
-                    {"order": "Selected Order must be in delivery Status ord Delivered"}
-                )
-        return super().clean()
+    # def clean(self) -> None:
+    #     if self.order:
+    #         if self.order.receive_type not in [Order.DELIVER]:
+    #             raise ValidationError({"order": "Selected Order is TAKEOUT"})
+    #         if self.order.status not in [Order.DELIVERED, Order.DELIVERY]:
+    #             raise ValidationError(
+    #                 {"order": "Selected Order must be in delivery Status ord Delivered"}
+    #             )
+    #     return super().clean()
