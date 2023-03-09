@@ -1,6 +1,6 @@
 # Restaurant Management System
-A management system for online restaurants written in **Django**
 
+A management system for online restaurants written in **Django**
 
 ## How to run
 
@@ -8,7 +8,7 @@ A management system for online restaurants written in **Django**
 
 ```shell
 python -m venv env
-source env/bin/activate 
+source env/bin/activate
 ```
 
 ### Install requirments
@@ -16,13 +16,17 @@ source env/bin/activate
 ```shell
 pip install -r requirements.txt
 ```
-### Run migrations & Creat super user
+
+### Run migrations & Creat super user & Clear and creat log files
+
 ```shell
 python manage.py migrate
 python manage.py createsuperuser
+./clear_log.sh
 ```
 
 ### optional: Load some default data with fixtures
+
 ```shell
 python scripts/load_data.py
 ```
